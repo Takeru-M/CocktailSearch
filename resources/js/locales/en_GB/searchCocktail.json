@@ -1,0 +1,66 @@
+{
+    "top-title": "Search Cocktail",
+    "top-placeholder": "Input search text",
+    "detail-search": {
+        "acd-lavel": "Filtering",
+        "base": {
+            "base": "Base",
+            "gin": "Gin",
+            "voldka": "Boldka",
+            "tequila": "Tequila",
+            "rum": "Rum",
+            "whisky": "Whisky",
+            "brandy": "Brandy",
+            "liqour": "Liqour",
+            "wine": "Wine",
+            "beer": "Beer",
+            "japanese-sake": "Japanese Sake",
+            "non-alcohol": "Non alcohol"
+        },
+        "taste": {
+            "taste": "Taste",
+            "sweet": "Sweet",
+            "medium-sweet": "Medium Sweet",
+            "medium": "Medium",
+            "medium-dry": "Medium Dry",
+            "dry": "Dry"
+        },
+        "percentage": {
+            "percentage": "Percentage",
+            "non-alcohol": "Non alcohol",
+            "weak": "1~10(weak)",
+            "normal": "11~20(normal)",
+            "slightly-strong": "21~30(slightly strong)",
+            "strong": "31~40(strong)",
+            "very-strong": "41~(very strong)"
+        },
+        "feature": {
+            "feature": "Feature",
+            "standard": "Standard",
+            "original": "Original",
+            "simple": "Simple",
+            "light": "Light",
+            "refreshing": "Refreshing",
+            "smooth": "Smooth",
+            "sharp": "Sharp",
+            "sour": "Sour",
+            "rich": "Rich",
+            "strong": "Strong",
+            "easy-to-drink": "Easy to drink",
+            "sober": "Sober",
+            "fun": "Fun",
+            "beautiful": "Beautiful",
+            "hot": "Hot",
+            "tropical": "Tropical",
+            "elegant": "Elegant",
+            "masculine": "Masculine",
+            "recommended-for-women": "Recommended for women",
+            "historic": "Historic",
+            "pousse-cafe": "Pousse cafe",
+            "good-with-food": "Good with food",
+            "va-11-hall-1": "VA-11 Hall-A",
+            "cyberpunk-2077": "CyberPunk 2077"
+        },
+        "filtering-btn": "Filter"
+    }
+}

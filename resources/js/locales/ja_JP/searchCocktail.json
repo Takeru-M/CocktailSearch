@@ -1,0 +1,66 @@
+{
+    "top-logo": "カクテルを探す",
+    "top-placeholder": "検索ワードを入力してください",
+    "detail-search": {
+        "acd-lavel": "条件を絞る",
+        "base": {
+            "base": "ベース",
+            "gin": "ジン",
+            "voldka": "ウォッカ",
+            "tequila": "テキーラ",
+            "rum": "ラム",
+            "whisky": "ウィスキー",
+            "brandy": "ブランデー",
+            "liqour": "リキュール",
+            "wine": "ワイン",
+            "beer": "ビール",
+            "japanese-sake": "日本酒",
+            "non-alcohol": "ノンアルコール"
+        },
+        "taste": {
+            "taste": "味わい",
+            "sweet": "甘口",
+            "medium-sweet": "中甘口",
+            "medium": "中口",
+            "medium-dry": "中辛口",
+            "dry": "辛口"
+        },
+        "percentage": {
+            "percentage": "度数",
+            "non-alcohol": "ノンアルコール",
+            "weak": "1~10(弱め)",
+            "normal": "11~20(普通)",
+            "slightly-strong": "21~30(やや強い)",
+            "strong": "31~40(強い)",
+            "very-strong": "41~(とても強い)"
+        },
+        "feature": {
+            "feature": "特徴",
+            "standard": "スタンダード",
+            "original": "オリジナル",
+            "simple": "シンプル",
+            "light": "さっぱり",
+            "refreshing": "爽やか",
+            "smooth": "まろやか",
+            "sharp": "キレがある",
+            "sour": "酸っぱい",
+            "rich": "濃厚",
+            "strong": "強い",
+            "easy-to-drink": "飲みやすい",
+            "sober": "酔い醒まし",
+            "fun": "楽しい",
+            "beautiful": "美しい",
+            "hot": "ホット",
+            "tropical": "トロピカル",
+            "elegant": "エレガント",
+            "masculine": "男らしい",
+            "recommended-for-women": "女性におすすめ",
+            "historic": "歴史ある",
+            "pousse-cafe": "プース・カフェ",
+            "good-with-food": "料理に合う",
+            "va-11-hall-1": "VA-11 Hall-A",
+            "cyberpunk-2077": "CyberPunk 2077"
+        },
+        "filtering-btn": "絞り込み"
+    }
+}

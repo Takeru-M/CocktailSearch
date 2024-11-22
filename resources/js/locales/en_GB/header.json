@@ -1,0 +1,8 @@
+{
+    "header-logo": "CocktailSearch",
+    "nav": {
+        "nav1": "SearchCocktail",
+        "nav2": "My Page",
+        "nav3": "Log out"
+    }
+}
