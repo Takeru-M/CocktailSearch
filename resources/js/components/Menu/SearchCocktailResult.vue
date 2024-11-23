@@ -1,8 +1,8 @@
 <template>
     <div class="result">
         <div class="result-contents">
-            <ul class="result-content-ui" v-if="results.cocktails && results.cocktails.length">
-                <li v-for="result in results.cocktails" :key="result.cocktail_id">
+            <ul class="result-content-ui" v-if="cocktailData">
+                <li v-for="result in cocktailData.cocktails" :key="result.cocktail_id">
                     <RouterLink
                     :to="{ name: 'CocktailDetail', params: { id: result.cocktail_id } }"
                     @click="setSelectedCocktail(result)"
@@ -50,9 +50,6 @@
 
     export default defineComponent ({
         props: {
-            results: {
-                type:Object,
-            },
             status: {
                 type: Boolean,
             },
@@ -60,13 +57,8 @@
         setup(props) {
             const { t } = useI18n();
             const store = useStore();
-            let tmp = ref('');
-            // const exf = () => {
-            //     const id = computed(() => store.state.selectedCocktailID);
-            //     ex.value = id.value;
-            //     console.log(ex.value);
-            // }
 
+            const cocktailData = computed(() => store.getters.cocktailData);
             const setSelectedCocktail = (result) => {
                 store.dispatch("setSelectedCocktail", result);
             };
@@ -74,8 +66,8 @@
             return {
                 t,
                 store,
+                cocktailData,
                 setSelectedCocktail,
-                tmp,
             };
         },
     });

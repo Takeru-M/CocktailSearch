@@ -7,12 +7,12 @@
     </a-breadcrumb> -->
     <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }" class="contents-wrapper">
         <div class="menu-contents">
-            <SearchCocktail @update-results="handleResults" :current="currentPage"></SearchCocktail>
+            <SearchCocktail :current="currentPage"></SearchCocktail>
         </div>
-        <div class="cocktail-result" v-if="true">
-            <SearchCocktailResult :results="cocktailResults" :status="searchStatus"></SearchCocktailResult>
+        <div class="cocktail-result">
+            <SearchCocktailResult :status="searchStatus"></SearchCocktailResult>
         </div>
-        <div class="pagination" v-if="cocktailResults.cocktails && cocktailResults.cocktails.length">
+        <div class="pagination" v-if="cocktailData">
             <a-pagination v-model:current="currentPage" :total="50" show-less-items />
         </div>
     </div>
@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
 import SearchCocktail from './Menu/SearchCocktail.vue';
 import SearchCocktailResult from './Menu/SearchCocktailResult.vue';
 
@@ -30,22 +31,17 @@ export default defineComponent ({
         SearchCocktailResult
     },
     setup () {
+        const store = useStore();
+
         const selectedKeys = ref(['2']);
         const currentPage = ref(1);
         let searchStatus = ref(false);
-        const cocktailResults = ref([]);
-
-        const handleResults = (results) => {
-            cocktailResults.value = results;
-            // console.log(cocktailResults.value.cocktails[0]);
-            searchStatus.value = true;
-        };
+        const cocktailData = computed(() => store.getters.cocktailData);
 
         return {
             currentPage,
-            cocktailResults,
-            handleResults,
-            searchStatus
+            searchStatus,
+            cocktailData,
         };
     }
 })

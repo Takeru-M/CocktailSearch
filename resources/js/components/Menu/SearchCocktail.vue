@@ -101,8 +101,7 @@
                 type: Number
             }
         },
-        emits: ['update-results'],
-        setup( props,  { emit }) {
+        setup(props) {
             const { t } = useI18n();
             const store = useStore();
 
@@ -111,7 +110,11 @@
             const selectedTaste = ref('');
             const selectedFeature = ref('');
             const selectedPercentage = ref('');
-            let cocktailData = '';
+            let cocktailData = {};
+
+            const setCocktailData = (cocktailData) => {
+                store.dispatch("setCocktailData", cocktailData);
+            }
 
             const fetchCocktailData = async () => {
                 cocktailData = await store.dispatch('fetchCocktailData', {
@@ -121,8 +124,8 @@
                     percentage: selectedPercentage.value,
                     tag: selectedFeature.value,
                     page: props.current
-                })
-                emit('update-results', cocktailData);
+                });
+                setCocktailData(cocktailData);
             };
 
             watch(() => props.current, (newValue, oldValue) => {
@@ -141,6 +144,8 @@
                 selectedTaste,
                 selectedFeature,
                 selectedPercentage,
+                setCocktailData,
+                fetchCocktailData,
                 onSearch,
             }
         }

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../components/Login.vue';
 import Menu from '../components/Menu.vue';
 import CocktailDetail from '../components/Menu/CocktailDetail.vue';
+import { KeepAlive } from 'vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,10 @@ const router = createRouter({
         {
             path: '/menu',
             name: 'Menu',
-            component: Menu
+            component: Menu,
+            meta: {
+                KeepAlive: true
+            },
         },
         {
             path: '/cocktail/:id',

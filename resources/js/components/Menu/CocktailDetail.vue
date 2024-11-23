@@ -6,10 +6,6 @@
         <a-breadcrumb-item>App</a-breadcrumb-item>
     </a-breadcrumb> -->
     <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }" class="contents-wrapper">
-        <!-- <div class="wrap">
-            <p>{{ route.params.id }}</p>
-            <p>{{ selectedCocktail.cocktail_name }}</p>
-        </div> -->
         <div class="cocktail-detail">
             <div class="cocktail-detail-wrapper">
                 <div class="cocktail-title">
@@ -76,7 +72,6 @@
                 store,
                 route,
                 selectedCocktail,
-                // getSelectedCocktailData,
             }
         }
     })

@@ -7,6 +7,7 @@ export default createStore ({
         userName: '',
         userPass: '',
         selectedCocktailID: 0,
+        cocktailData: {},
         selectedCocktail: {},
         // count: 0,
     },
@@ -16,6 +17,9 @@ export default createStore ({
         },
         login (state) {
             return state.login;
+        },
+        cocktailData (state) {
+            return state.cocktailData;
         },
         selectedCocktail (state) {
             return state.selectedCocktail;
@@ -27,6 +31,9 @@ export default createStore ({
         },
         setCocktailID (state, id) {
             state.selectedCocktailID = id;
+        },
+        setCocktailData (state, results) {
+            state.cocktailData = results;
         },
         setSelectedCocktail (state, result) {
             state.selectedCocktail = result;
@@ -81,8 +88,11 @@ export default createStore ({
                 console.error(e.message);
             };
         },
+        async setCocktailData ({ commit }, results) {
+            await commit("setCocktailData", results);
+        },
         async setSelectedCocktail ({ commit }, result) {
-            commit("setSelectedCocktail", result);
+            await commit("setSelectedCocktail", result);
         },
     },
 });
