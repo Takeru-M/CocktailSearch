@@ -3,7 +3,10 @@
         <div class="result-contents">
             <ul class="result-content-ui" v-if="results.cocktails && results.cocktails.length">
                 <li v-for="result in results.cocktails" :key="result.cocktail_id">
-                    <RouterLink to="./cocktals">
+                    <RouterLink
+                    :to="{ name: 'CocktailDetail', params: { id: result.cocktail_id } }"
+                    @click="setSelectedCocktail(result)"
+                    >
                         <div class="result-content">
                             <div class="result-content-wrapper">
                                 <div class="result-content-img"></div>
@@ -38,9 +41,12 @@
 </template>
 
 <script>
-    import { defineComponent, defineProps } from 'vue';
+    import { ref } from 'vue';
+    import { ClickOutside } from 'element-plus';
+    import { defineComponent, defineProps, computed } from 'vue';
     import { useI18n } from 'vue-i18n';
-import { RouterLink } from 'vue-router';
+    import { RouterLink } from 'vue-router';
+    import { useStore } from 'vuex';
 
     export default defineComponent ({
         props: {
@@ -53,11 +59,26 @@ import { RouterLink } from 'vue-router';
         },
         setup(props) {
             const { t } = useI18n();
+            const store = useStore();
+            let tmp = ref('');
+            // const exf = () => {
+            //     const id = computed(() => store.state.selectedCocktailID);
+            //     ex.value = id.value;
+            //     console.log(ex.value);
+            // }
+
+            const setSelectedCocktail = (result) => {
+                store.dispatch("setSelectedCocktail", result);
+            };
+
             return {
                 t,
-            }
-        }
-    })
+                store,
+                setSelectedCocktail,
+                tmp,
+            };
+        },
+    });
 </script>
 
 <style>

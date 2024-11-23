@@ -6,29 +6,40 @@ export default createStore ({
         login: true,
         userName: '',
         userPass: '',
+        selectedCocktailID: 0,
+        selectedCocktail: {},
         // count: 0,
     },
     getters: {
-        count(state) {
+        count (state) {
             return state.count;
         },
-        login(state) {
+        login (state) {
             return state.login;
+        },
+        selectedCocktail (state) {
+            return state.selectedCocktail;
         }
     },
     mutations: {
-        increment(state) {
+        increment (state) {
             state.count++;
         },
+        setCocktailID (state, id) {
+            state.selectedCocktailID = id;
+        },
+        setSelectedCocktail (state, result) {
+            state.selectedCocktail = result;
+        }
     },
     actions: {
-        ex(name, pass) {
+        ex (name, pass) {
             console.log(name, pass);
         },
-        increment({ commit }) {
+        increment ({ commit }) {
             commit('increment');
         },
-        async fetchCocktailData({ commit }, {word, base, taste, percentage, tag, page}) {
+        async fetchCocktailData ({ commit }, {word, base, taste, percentage, tag, page}) {
             let alcohol_from = '';
             let alcohol_to = '';
             switch (percentage) {
@@ -66,9 +77,12 @@ export default createStore ({
                     }
                 });
                 return response.data;
-            } catch(e) {
+            } catch (e) {
                 console.error(e.message);
             };
         },
-    }
+        async setSelectedCocktail ({ commit }, result) {
+            commit("setSelectedCocktail", result);
+        },
+    },
 });

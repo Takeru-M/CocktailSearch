@@ -2,7 +2,6 @@
     <div class="login">
         <div class="login-wrapper">
             <div class="login-contents">
-                {{ t("login.username") }}
                 <a-form
                     :model="formState"
                     name="basic"
