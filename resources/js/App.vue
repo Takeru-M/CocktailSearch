@@ -1,10 +1,10 @@
 <template>
     <a-layout>
-        <Header v-if="true"></Header>
+        <Header v-if="login"></Header>
         <div class="contents">
             <router-view></router-view>
         </div>
-        <Footer v-if="true"></Footer>
+        <Footer v-if="login"></Footer>
     </a-layout>
 </template>
 
@@ -21,7 +21,8 @@
         },
         setup() {
             const store = useStore();
-            const login = computed(() => store.getters.login);
+            const login = ref(computed(() => store.getters.login));
+
             return {
                 login
             }

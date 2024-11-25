@@ -1,10 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiController;
 
-// Route::prefix('api')->group(function () {
-//     require __DIR__ . './api_ver1.php';
-// });
+require __DIR__ . '/api_ver1.php';
 
-// Route::get('/api/menu', [ApiController::class, 'ex']);
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');

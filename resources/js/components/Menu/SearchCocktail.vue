@@ -112,10 +112,6 @@
             const selectedPercentage = ref('');
             let cocktailData = {};
 
-            const setCocktailData = (cocktailData) => {
-                store.dispatch("setCocktailData", cocktailData);
-            }
-
             const fetchCocktailData = async () => {
                 cocktailData = await store.dispatch('fetchCocktailData', {
                     word: searchValue.value,
@@ -127,6 +123,10 @@
                 });
                 setCocktailData(cocktailData);
             };
+
+            const setCocktailData = (cocktailData) => {
+                store.dispatch("setCocktailData", cocktailData);
+            }
 
             watch(() => props.current, (newValue, oldValue) => {
                 fetchCocktailData();

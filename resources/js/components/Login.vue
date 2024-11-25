@@ -1,5 +1,12 @@
 <template>
     <div class="login">
+        <div class="login-register">
+            <a-space wrap>
+                <a-button type="primary" class="register-btn">
+                    <RouterLink to="/signin">Sign in</RouterLink>
+                </a-button>
+            </a-space>
+        </div>
         <div class="login-wrapper">
             <div class="login-contents">
                 <a-form
@@ -30,11 +37,10 @@
                     </a-form-item>
 
                     <a-form-item :wrapper-col="{ offset: 8, span: 16 }" class="login-btn">
-                    <a-button type="primary" html-type="submit" @click="doLogin">{{ t('login.submit') }}</a-button>
+                    <a-button type="primary" html-type="submit" @click="login">{{ t('login.submit') }}</a-button>
                     </a-form-item>
                 </a-form>
             </div>
-            <RouterLink to="/menu">Menuへ移動</RouterLink>
         </div>
     </div>
 </template>
@@ -44,39 +50,38 @@
     import { useStore } from 'vuex';
     import axios from 'axios';
     import { useI18n } from 'vue-i18n';
+    import router from '../router';
+    import { RouterLink } from 'vue-router';
 
     export default defineComponent ({
         setup() {
             const { t } = useI18n();
             const store = useStore();
             const formState = reactive({
-            username: '',
-            password: '',
+                username: '',
+                password: '',
             });
             const onFinish = values => {
-            console.log('Success:', values);
+                console.log('Success:', values);
             };
             const onFinishFailed = errorInfo => {
-            console.log('Failed:', errorInfo);
+                console.log('Failed:', errorInfo);
             };
-            const count = computed(() => store.getters.count);
-            const increment = () => {
-                    store.dispatch('increment');
-                };
-            // const doLogin = () => {
-            //     store.dispatch('ex', {
-            //         name: formState.username,
-            //         pass: formState.password
-            //     });
-            // }
-            const doLogin = async () => {
+            // const count = computed(() => store.getters.count);
+            // const increment = () => {
+            //         store.dispatch('increment');
+            //     };
+            const login = async () => {
                 try {
                     // バックエンドAPIにPOSTリクエストを送る
-                    const response = await axios.post('http://localhost/api/login', {
-                        username: formState.username,
+                    const response = await axios.post('http://127.0.0.1:8000/api/login', {
+                        name: formState.username,
                         password: formState.password,
                     });
-
+                    localStorage.setItem('auth_token', response.data.token);
+                    store.dispatch('login');
+                    store.dispatch('setUser', response.data.user);
+                    router.push('/dashboard');
                     // 成功時の処理
                     console.log('Login successful:', response.data);
                     // ログイン成功後に追加の処理（例: トークンの保存やリダイレクト）を行う
@@ -94,9 +99,9 @@
                 formState,
                 onFinish,
                 onFinishFailed,
-                doLogin,
-                count,
-                increment,
+                login,
+                // count,
+                // increment,
             };
         }
     })
@@ -104,12 +109,20 @@
 
 <style>
     .login{
-        margin-top: 35vh;
-        margin-bottom: 35vh;
+        height: 100vh;
+    }
+    .login-register {
+        height: 10vh;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .register-btn {
+        margin-right: 3vw;
     }
     .login-wrapper{
         width: 80vw;
-        margin: 0 auto;
+        margin: 25vh auto 0 auto;
     }
     .name-form{
         position: relative;

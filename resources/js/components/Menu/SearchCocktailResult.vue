@@ -10,24 +10,24 @@
                         <div class="result-content">
                             <div class="result-content-wrapper">
                                 <div class="result-content-img"></div>
-                        <div class="result-content-explanation">
-                            <div class="result-content-explanation-wrapper">
-                                <div class="result-content-name">
-                                    <div class="result-content-name-ja">
-                                        {{ result.cocktail_name }}
+                                <div class="result-content-explanation">
+                                    <div class="result-content-explanation-wrapper">
+                                        <div class="result-content-name">
+                                            <div class="result-content-name-ja">
+                                                {{ result.cocktail_name }}
+                                            </div>
+                                            <div class="result-content-name-en">
+                                                <h4>{{ result.cocktail_name_english }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="reuslt-content-alcohol">
+                                            <h5>{{ t('searchCocktailResult.percentage') }} {{ result.alcohol }}</h5>
+                                        </div>
+                                        <div class="result-content-desc">
+                                            <p>{{ result.cocktail_desc }}</p>
+                                        </div>
                                     </div>
-                                    <div class="result-content-name-en">
-                                        <h4>{{ result.cocktail_name_english }}</h4>
-                                    </div>
                                 </div>
-                                <div class="reuslt-content-alcohol">
-                                    <h5>{{ t('searchCocktailResult.percentage') }} {{ result.alcohol }}</h5>
-                                </div>
-                                <div class="result-content-desc">
-                                    <p>{{ result.cocktail_desc }}</p>
-                                </div>
-                            </div>
-                        </div>
                             </div>
                         </div>
                     </RouterLink>

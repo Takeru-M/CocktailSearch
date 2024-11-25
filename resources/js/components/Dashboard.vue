@@ -12,15 +12,16 @@
         <div class="cocktail-result">
             <SearchCocktailResult :status="searchStatus"></SearchCocktailResult>
         </div>
-        <div class="pagination" v-if="cocktailData">
-            <a-pagination v-model:current="currentPage" :total="50" show-less-items />
+        <div class="pagination" v-if="cocktailData.cocktails">
+            <!-- <a-pagination v-model:current="currentPage" :total="500" show-less-items /> -->
+            <a-pagination v-model:current="currentPage" simple :total="totalOfItems" />
         </div>
     </div>
     </a-layout-content>
 </template>
 
 <script>
-import { ref, defineComponent, computed } from 'vue';
+import { ref, defineComponent, computed, watchEffect, watch } from 'vue';
 import { useStore } from 'vuex';
 import SearchCocktail from './Menu/SearchCocktail.vue';
 import SearchCocktailResult from './Menu/SearchCocktailResult.vue';
@@ -35,13 +36,19 @@ export default defineComponent ({
 
         const selectedKeys = ref(['2']);
         const currentPage = ref(1);
-        let searchStatus = ref(false);
+        const searchStatus = ref(false);
         const cocktailData = computed(() => store.getters.cocktailData);
+        let totalOfItems = ref(0);
+        watch(cocktailData, (newValue, oldValue) => {
+            totalOfItems.value = cocktailData.value.total_pages * 20;
+            console.log(totalOfItems.value);
+        });
 
         return {
             currentPage,
             searchStatus,
             cocktailData,
+            totalOfItems,
         };
     }
 })

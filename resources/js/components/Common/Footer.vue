@@ -1,5 +1,5 @@
 <template>
-    <a-layout-footer :style="{ textAlign: 'center' }">
+    <a-layout-footer :style="{ textAlign: 'center' }" class="footer">
         Ant Design ©2018 Created by Ant UED
     </a-layout-footer>
 </template>
@@ -18,6 +18,9 @@
 </script>
 
 <style scoped>
+.footer {
+    height: 10vh;
+}
 .site-layout-content {
     min-height: 280px;
     padding: 24px;

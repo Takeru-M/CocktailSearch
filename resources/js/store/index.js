@@ -3,17 +3,15 @@ import axios from 'axios';
 
 export default createStore ({
     state: {
-        login: true,
-        userName: '',
-        userPass: '',
+        login: false,
+        user: {},
         selectedCocktailID: 0,
         cocktailData: {},
         selectedCocktail: {},
-        // count: 0,
     },
     getters: {
-        count (state) {
-            return state.count;
+        user (state) {
+            return state.user;
         },
         login (state) {
             return state.login;
@@ -26,8 +24,14 @@ export default createStore ({
         }
     },
     mutations: {
-        increment (state) {
-            state.count++;
+        setUser (state, user) {
+            state.user = user;
+        },
+        login (state) {
+            state.login = true;
+        },
+        logout (state) {
+            state.login = false;
         },
         setCocktailID (state, id) {
             state.selectedCocktailID = id;
@@ -43,10 +47,16 @@ export default createStore ({
         ex (name, pass) {
             console.log(name, pass);
         },
-        increment ({ commit }) {
-            commit('increment');
+        setUser ({commit}, user) {
+            commit('setUser', user);
         },
-        async fetchCocktailData ({ commit }, {word, base, taste, percentage, tag, page}) {
+        login ({commit}) {
+            commit('login');
+        },
+        logout ({commit}) {
+            commit('logout');
+        },
+        async fetchCocktailData ({word, base, taste, percentage, tag, page}) {
             let alcohol_from = '';
             let alcohol_to = '';
             switch (percentage) {
@@ -72,7 +82,7 @@ export default createStore ({
                     break;
             };
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/menu', {
+                const response = await axios.get('http://127.0.0.1:8000/api/dashboard', {
                     params: {
                         word: word,
                         base: base,
@@ -89,10 +99,10 @@ export default createStore ({
             };
         },
         async setCocktailData ({ commit }, results) {
-            await commit("setCocktailData", results);
+            await commit('setCocktailData', results);
         },
         async setSelectedCocktail ({ commit }, result) {
-            await commit("setSelectedCocktail", result);
+            await commit('setSelectedCocktail', result);
         },
     },
 });
