@@ -8,11 +8,16 @@
     <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }" class="contents-wrapper">
         <div class="cocktail-detail">
             <div class="cocktail-detail-wrapper">
-                <div class="cocktail-title">
-                    <div class="cocktail-digest">{{ selectedCocktail.cocktail_digest }}</div>
-                    <div class="cocktail-name">
-                        <div class="cocktail-name-ja">{{ selectedCocktail.cocktail_name }}</div>
-                        <div class="cocktail-name-en">{{ selectedCocktail.cocktail_name_english }}</div>
+                <div class="cocktail-top">
+                    <div class="cocktail-title">
+                        <div class="cocktail-digest">{{ selectedCocktail.cocktail_digest }}</div>
+                        <div class="cocktail-name">
+                            <div class="cocktail-name-ja">{{ selectedCocktail.cocktail_name }}</div>
+                            <div class="cocktail-name-en">{{ selectedCocktail.cocktail_name_english }}</div>
+                        </div>
+                    </div>
+                    <div class="fav-btn-wrapper">
+                        <button @click="favBtn"><HeartFilled class="fav-btn" :style="{ color: favBtnColor }" /></button>
                     </div>
                 </div>
                 <div class="cocktail-content">
@@ -54,32 +59,89 @@
     import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useRoute } from 'vue-router';
+    import axios from 'axios';
+    import { HeartFilled } from '@ant-design/icons-vue';
 
     export default defineComponent ({
+        components: {
+            HeartFilled,
+        },
         setup() {
             const store = useStore();
             const route = useRoute();
 
             const selectedCocktail = computed(() => store.getters.selectedCocktail);
+            let favFlag = false;
+            const favBtnColor = ref('gray');
 
-            // const getSelectedCocktailData = async () => {
-            //     const tmp = computed(() => store.getters.selectedCocktail);
-            //     selectedCocktail.value = tmp.value;
-            //     console.log(selectedCocktail.value);
-            // }
+            const favBtn = () => {
+                const user = computed(() => store.getters.user);
+                favBtnColor.value = favBtnColor.value === 'gray' ? 'red' : 'gray';
+                if (!favFlag) {
+                    registerFav(user);
+                    favFlag = true;
+                } else {
+                    removeFav(user);
+                    favFlag = false;
+                }
+            };
+
+            const registerFav = async (user) => {
+                try {
+                    const responseFromRegisterCocktail = await axios.post('http://127.0.0.1:8000/api/registerCocktail', {
+                        cocktailData: selectedCocktail.value,
+                    });
+                    console.log(responseFromRegisterCocktail.data);
+                    const responseFromRegisterFav = await axios.post('http://127.0.0.1:8000/api/registerFav', {
+                        userID: user.value.id,
+                        cocktailID: selectedCocktail.value.cocktail_id,
+                    });
+                    console.log(responseFromRegisterFav.data);
+                } catch (error) {
+                    console.error('An error occurred:', error.message);
+                }
+            };
+
+            const removeFav = async (user) => {
+                try {
+                    const responseFromRemoveFav = await axios.post('http://127.0.0.1:8000/api/removeFav', {
+                        userID: user.value.id,
+                        cocktailID: selectedCocktail.value.cocktail_id,
+                    });
+                    console.log(responseFromRemoveFav.data);
+                } catch (error) {
+                    console.error('An error occurred:', error.message);
+                }
+            }
 
             return {
                 store,
                 route,
+                favFlag,
                 selectedCocktail,
+                favBtnColor,
+                favBtn,
+                registerFav,
+                removeFav,
             }
-        }
-    })
+        },
+    });
 </script>
 
 <style>
     .cocktail-detail-wrapper {
         padding: 2%;
+    }
+    .cocktail-top {
+        display: flex;
+        justify-content: space-between;
+    }
+    .fav-btn-wrapper {
+        margin: 10vh 5vw 0 0;
+    }
+    .fav-btn {
+        color: gray;
+        font-size: 25px;
     }
     .cocktail-content {
         display: flex;

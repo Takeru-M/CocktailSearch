@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function cocktails()
+    {
+        return $this->hasMany(Cocktail::class);
+    }
 }

@@ -41,7 +41,6 @@ export default defineComponent ({
         let totalOfItems = ref(0);
         watch(cocktailData, (newValue, oldValue) => {
             totalOfItems.value = cocktailData.value.total_pages * 20;
-            console.log(totalOfItems.value);
         });
 
         return {
