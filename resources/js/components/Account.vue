@@ -3,28 +3,30 @@
         <div class="account-wrapper">
             <div class="account-info">
                 <div class="account-name">
-                    <h1>aiueo</h1>
+                    <h1>{{ user.name }}</h1>
                 </div>
                 <div class="account-mail">
-                    <h3>aiueo</h3>
+                    <h3>{{ user.email }}</h3>
                 </div>
                 <div class="account-menu">
-                    <RouterLink to="/setting">aiueo</RouterLink>
+                    <button>
+                        <RouterLink to="/setting">{{ t('account.account-setting') }}</RouterLink>
+                    </button>
                 </div>
             </div>
             <div class="account-history">
                 <div class="top">
-                    <h2>履歴</h2>
+                    <h2>{{ t('account.account-history-title') }}</h2>
                     <div class="all-display-btn">
                         <a-space wrap>
                             <a-button>
-                                <RouterLink to="/history">全て表示</RouterLink>
+                                <RouterLink to="/history">{{ t('account.account-btn') }}</RouterLink>
                             </a-button>
                         </a-space>
                     </div>
                 </div>
                 <ul class="cocktail-items">
-                    <li class="cocktail-item">
+                    <li class="cocktail-item" v-for="history in histories" :key="history.cocktail_id">
                         <RouterLink
                         :to="{ name: 'CocktailDetail', params: { id: 1 } }"
                         @click=""
@@ -33,16 +35,10 @@
                             <div class="cocktail-content-explanation">
                                 <div class="cocktail-content-explanation-wrapper">
                                     <div class="cocktail-content-name">
-                                        <div class="cocktail-content-name-ja">
-                                            aiueo
-                                        </div>
-                                        <div class="cocktail-content-name-en">
-                                            aiueo
-                                        </div>
+                                        <div class="cocktail-content-name-ja">{{ history.cocktail_name }}</div>
+                                        <div class="cocktail-content-name-en">{{ history.cocktail_name_english }}</div>
                                     </div>
-                                    <div class="cocktail-content-alcohol">
-                                        aiueo
-                                    </div>
+                                    <div class="cocktail-content-alcohol">{{ history.alcohol }}</div>
                                 </div>
                             </div>
                         </RouterLink>
@@ -51,35 +47,29 @@
             </div>
             <div class="account-fav">
                 <div class="top">
-                    <h2>お気に入り</h2>
+                    <h2>{{ t('account.account-fav-title') }}</h2>
                     <div class="all-display-btn">
                         <a-space wrap>
                             <a-button>
-                                <RouterLink to="/fav">全て表示</RouterLink>
+                                <RouterLink to="/fav">{{ t('account.account-btn') }}</RouterLink>
                             </a-button>
                         </a-space>
                     </div>
                 </div>
                 <ul class="cocktail-items">
-                    <li class="cocktail-item">
+                    <li class="cocktail-item" v-for="cocktail in favCocktails" :key="cocktail.cocktail_id">
                         <RouterLink
-                    :to="{ name: 'CocktailDetail', params: { id: 1 } }"
+                    :to="{ name: 'CocktailDetail', params: { id: cocktail.cocktail_id } }"
                     @click=""
                     >
                             <div class="cocktail-item-img"></div>
                             <div class="cocktail-content-explanation">
                                 <div class="cocktail-content-explanation-wrapper">
                                     <div class="cocktail-content-name">
-                                        <div class="cocktail-content-name-ja">
-                                            aiueo
-                                        </div>
-                                        <div class="cocktail-content-name-en">
-                                            aiueo
-                                        </div>
+                                        <div class="cocktail-content-name-ja">{{ cocktail.cocktail_name }}</div>
+                                        <div class="cocktail-content-name-en">{{ cocktail.cocktail_name_english }}</div>
                                     </div>
-                                    <div class="cocktail-content-alcohol">
-                                        aiueo
-                                    </div>
+                                    <div class="cocktail-content-alcohol">{{ cocktail.alcohol }}{{ t('account.account-alcohol') }}</div>
                                 </div>
                             </div>
                         </RouterLink>
@@ -91,7 +81,54 @@
 </template>
 
 <script>
+    import { defineComponent, computed, ref, onMounted } from 'vue';
     import { RouterLink } from 'vue-router';
+    import { useStore } from 'vuex';
+    import { useI18n } from 'vue-i18n';
+    import axios from 'axios';
+
+    export default defineComponent ({
+        setup() {
+            const { t } = useI18n();
+            const store = useStore();
+            let favCocktails = ref({});
+            let histories = ref({});
+
+            const user = computed(() => store.getters.user).value;
+
+            onMounted(() => {
+                getHistory();
+                getFavCocktail();
+            });
+
+            const getHistory = async () => {
+                const response = await axios.post('http://127.0.0.1:8000/api/getHistory', {
+                    userID: user.id
+                });
+                histories.value = response.data.history;
+                // console.log(response.data);
+            };
+
+            const getFavCocktail = async () => {
+                const response = await axios.post('http://127.0.0.1:8000/api/getFavCocktail', {
+                    userID: user.id
+                });
+                favCocktails.value = response.data.favCocktail;
+                // console.log(response.data);
+                // console.log(favCocktails.value);
+            };
+
+            return {
+                t,
+                store,
+                user,
+                getHistory,
+                getFavCocktail,
+                histories,
+                favCocktails,
+            }
+        }
+    })
 </script>
 
 <style>
@@ -118,7 +155,7 @@
         margin-bottom: 2vh;
     }
     .account-menu {
-        font-size: 30px;
+        font-size: 20px;
     }
     .account-history {
         margin-top: 15vh;
@@ -135,28 +172,25 @@
     }
     .cocktail-items {
         display: flex;
+        justify-content: left;
         margin-top: 3vh;
     }
     .cocktail-item {
         margin: 0 0.5%;
+        width: 18%;
     }
     .cocktail-item-img {
         height: 30vh;
-        width: 15vw;
         padding: 2%;
         background-color: red;
     }
     .cocktail-content-explanation {
+        height: 23vh;
         padding: 5% 10%;
         background-color: gray;
     }
-    .cocktail-content-name {
-        display: flex;
-        align-items: center;
-    }
     .cocktail-content-name-ja {
-        font-size: 20px;
-        margin-right: 5%;
+        font-size: 15px;
     }
     .cocktail-content-alcohol {
         margin-top: 5%;

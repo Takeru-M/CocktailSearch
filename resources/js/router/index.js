@@ -4,6 +4,7 @@ import Dashboard from '../components/Dashboard.vue';
 import Account from '../components/Account.vue';
 import SignIn from '../components/SignIn.vue';
 import CocktailDetail from '../components/Menu/CocktailDetail.vue';
+import AccountSetting from '../components/AccountSetting.vue';
 import History from '../components/History.vue';
 import FavCocktails from '../components/FavCocktails.vue';
 
@@ -34,6 +35,11 @@ const router = createRouter({
             path: '/cocktail/:id',
             name: 'CocktailDetail',
             component: CocktailDetail
+        },
+        {
+            path: '/setting',
+            name: 'AccountSetting',
+            component: AccountSetting
         },
         {
             path: '/history',

@@ -5,6 +5,8 @@ export default createStore ({
     state: {
         login: false,
         user: {},
+        currentPage: 1,
+        totalOfItems: 0,
         selectedCocktailID: 0,
         cocktailData: {},
         selectedCocktail: {},
@@ -15,6 +17,12 @@ export default createStore ({
         },
         login (state) {
             return state.login;
+        },
+        currentPage (state) {
+            return state.currentPage;
+        },
+        totalOfItems (state) {
+            return state.totalOfItems;
         },
         cocktailData (state) {
             return state.cocktailData;
@@ -27,11 +35,17 @@ export default createStore ({
         setUser (state, user) {
             state.user = user;
         },
-        login (state) {
+        setLoginStatus (state) {
             state.login = true;
         },
-        logout (state) {
+        setLogoutStatus (state) {
             state.login = false;
+        },
+        setCurrentPage (state, currentPage) {
+            state.currentPage = currentPage;
+        },
+        setTotalOfItems (state, totalOfItems) {
+            state.totalOfItems = totalOfItems;
         },
         setCocktailID (state, id) {
             state.selectedCocktailID = id;
@@ -50,15 +64,21 @@ export default createStore ({
         setUser ({commit}, user) {
             commit('setUser', user);
         },
-        login ({commit}) {
-            commit('login');
+        setLoginStatus ({commit}) {
+            commit('setLoginStatus');
         },
-        logout ({commit}) {
-            commit('logout');
+        setLogoutStatus ({commit}) {
+            commit('setLogoutStatus');
         },
-        async fetchCocktailData ({word, base, taste, percentage, tag, page}) {
-            let alcohol_from = '';
-            let alcohol_to = '';
+        setCurrentPage ({commit}, currentPage) {
+            commit('setCurrentPage', currentPage);
+        },
+        setTotalOfItems ({commit}, totalOfItems) {
+            commit('setTotalOfItems', totalOfItems);
+        },
+        async fetchCocktailData (context, {word, base, taste, percentage, tag, page}) {
+            const alcohol_from = '';
+            const alcohol_to = '';
             switch (percentage) {
                 case 'weak':
                     alcohol_from = 1;

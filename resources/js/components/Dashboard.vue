@@ -7,13 +7,12 @@
     </a-breadcrumb> -->
     <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }" class="contents-wrapper">
         <div class="menu-contents">
-            <SearchCocktail :current="currentPage"></SearchCocktail>
+            <SearchCocktail></SearchCocktail>
         </div>
         <div class="cocktail-result">
             <SearchCocktailResult :status="searchStatus"></SearchCocktailResult>
         </div>
         <div class="pagination" v-if="cocktailData.cocktails">
-            <!-- <a-pagination v-model:current="currentPage" :total="500" show-less-items /> -->
             <a-pagination v-model:current="currentPage" simple :total="totalOfItems" />
         </div>
     </div>
@@ -21,7 +20,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, computed, watchEffect, watch } from 'vue';
+import { ref, defineComponent, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import SearchCocktail from './Menu/SearchCocktail.vue';
 import SearchCocktailResult from './Menu/SearchCocktailResult.vue';
@@ -35,15 +34,23 @@ export default defineComponent ({
         const store = useStore();
 
         const selectedKeys = ref(['2']);
-        const currentPage = ref(1);
+        const tmp = computed(() => store.state.currentPage);
+        let currentPage = ref(tmp.value);
+        const totalOfItems = computed(() => store.getters.totalOfItems);
         const searchStatus = ref(false);
         const cocktailData = computed(() => store.getters.cocktailData);
-        let totalOfItems = ref(0);
-        watch(cocktailData, (newValue, oldValue) => {
-            totalOfItems.value = cocktailData.value.total_pages * 20;
+
+        watch(tmp, (newValue, oldValue) => {
+            currentPage.value = tmp.value;
+        });
+
+        watch(currentPage, (newValue, oldValue) => {
+            store.dispatch('setCurrentPage', currentPage.value);
+            // console.log(tmp.value);
         });
 
         return {
+            tmp,
             currentPage,
             searchStatus,
             cocktailData,
@@ -54,9 +61,9 @@ export default defineComponent ({
 </script>
 
 <style scoped>
-    .contents-wrapper {
-        /* margin-top: 10vh; */
-    }
+    /* .contents-wrapper {
+        margin-top: 10vh;
+    } */
     .site-layout-content {
         min-height: 280px;
         padding: 24px;

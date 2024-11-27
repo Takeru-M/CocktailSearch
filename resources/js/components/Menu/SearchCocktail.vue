@@ -9,7 +9,7 @@
             v-model:value="searchValue"
             :placeholder="t('searchCocktail.top-placeholder')"
             style="width: 40vw"
-            @search="onSearch"
+            @search="fetchCocktailData(currentPage)"
             />
             </a-space>
             <div class="detail-search-box">
@@ -20,26 +20,26 @@
                         <div class="filtering-menu">
                             <select name="base" id="base-select" v-model="selectedBase" class="filtering-select">
                             <option value="">{{ t('searchCocktail.detail-search.base.base') }}</option>
-                            <option value="1">{{ t('searchCocktail.detail-search.base.gin') }}</option>
-                            <option value="2">{{ t('searchCocktail.detail-search.base.voldka') }}</option>
-                            <option value="3">{{ t('searchCocktail.detail-search.base.tequila') }}</option>
-                            <option value="4">{{ t('searchCocktail.detail-search.base.rum') }}</option>
-                            <option value="5">{{ t('searchCocktail.detail-search.base.whisky') }}</option>
-                            <option value="6">{{ t('searchCocktail.detail-search.base.brandy') }}</option>
-                            <option value="7">{{ t('searchCocktail.detail-search.base.liqour') }}</option>
-                            <option value="8">{{ t('searchCocktail.detail-search.base.wine') }}</option>
-                            <option value="9">{{ t('searchCocktail.detail-search.base.beer') }}</option>
-                            <option value="10">{{ t('searchCocktail.detail-search.base.japanese-sake') }}</option>
-                            <option value="0">{{ t('searchCocktail.detail-search.base.non-alcohol') }}</option>
+                            <option value=1>{{ t('searchCocktail.detail-search.base.gin') }}</option>
+                            <option value=2>{{ t('searchCocktail.detail-search.base.voldka') }}</option>
+                            <option value=3>{{ t('searchCocktail.detail-search.base.tequila') }}</option>
+                            <option value=4>{{ t('searchCocktail.detail-search.base.rum') }}</option>
+                            <option value=5>{{ t('searchCocktail.detail-search.base.whisky') }}</option>
+                            <option value=6>{{ t('searchCocktail.detail-search.base.brandy') }}</option>
+                            <option value=7>{{ t('searchCocktail.detail-search.base.liqour') }}</option>
+                            <option value=8>{{ t('searchCocktail.detail-search.base.wine') }}</option>
+                            <option value=9>{{ t('searchCocktail.detail-search.base.beer') }}</option>
+                            <option value=10>{{ t('searchCocktail.detail-search.base.japanese-sake') }}</option>
+                            <option value=0>{{ t('searchCocktail.detail-search.base.non-alcohol') }}</option>
                             </select>
 
                             <select name="taste" id="taste-select" v-model="selectedTaste" class="filtering-select">
                             <option value="">{{ t('searchCocktail.detail-search.taste.taste') }}</option>
-                            <option value="1">{{ t('searchCocktail.detail-search.taste.sweet') }}</option>
-                            <option value="2">{{ t('searchCocktail.detail-search.taste.medium-sweet') }}</option>
-                            <option value="3">{{ t('searchCocktail.detail-search.taste.medium') }}</option>
-                            <option value="4">{{ t('searchCocktail.detail-search.taste.medium-dry') }}</option>
-                            <option value="5">{{ t('searchCocktail.detail-search.taste.dry') }}</option>
+                            <option value=1>{{ t('searchCocktail.detail-search.taste.sweet') }}</option>
+                            <option value=2>{{ t('searchCocktail.detail-search.taste.medium-sweet') }}</option>
+                            <option value=3>{{ t('searchCocktail.detail-search.taste.medium') }}</option>
+                            <option value=4>{{ t('searchCocktail.detail-search.taste.medium-dry') }}</option>
+                            <option value=5>{{ t('searchCocktail.detail-search.taste.dry') }}</option>
                             </select>
 
                             <select name="percentage" id="percentage-select" v-model="selectedPercentage" class="filtering-select">
@@ -54,34 +54,34 @@
 
                             <select name="feature" id="feature-select" v-model="selectedFeature" class="filtering-select">
                             <option value="">{{ t('searchCocktail.detail-search.feature.feature') }}</option>
-                            <option value="1">{{ t('searchCocktail.detail-search.feature.standard') }}</option>
-                            <option value="2">{{ t('searchCocktail.detail-search.feature.original') }}</option>
-                            <option value="3">{{ t('searchCocktail.detail-search.feature.simple') }}</option>
-                            <option value="4">{{ t('searchCocktail.detail-search.feature.light') }}</option>
-                            <option value="5">{{ t('searchCocktail.detail-search.feature.refreshing') }}</option>
-                            <option value="6">{{ t('searchCocktail.detail-search.feature.smooth') }}</option>
-                            <option value="7">{{ t('searchCocktail.detail-search.feature.sharp') }}</option>
-                            <option value="8">{{ t('searchCocktail.detail-search.feature.sour') }}</option>
-                            <option value="9">{{ t('searchCocktail.detail-search.feature.rich') }}</option>
-                            <option value="10">{{ t('searchCocktail.detail-search.feature.strong') }}</option>
-                            <option value="11">{{ t('searchCocktail.detail-search.feature.easy-to-drink') }}</option>
-                            <option value="12">{{ t('searchCocktail.detail-search.feature.sober') }}</option>
-                            <option value="13">{{ t('searchCocktail.detail-search.feature.fun') }}</option>
-                            <option value="14">{{ t('searchCocktail.detail-search.feature.beautiful') }}</option>
-                            <option value="15">{{ t('searchCocktail.detail-search.feature.hot') }}</option>
-                            <option value="16">{{ t('searchCocktail.detail-search.feature.tropical') }}</option>
-                            <option value="17">{{ t('searchCocktail.detail-search.feature.elegant') }}</option>
-                            <option value="18">{{ t('searchCocktail.detail-search.feature.masculine') }}</option>
-                            <option value="19">{{ t('searchCocktail.detail-search.feature.recommended-for-women') }}</option>
-                            <option value="10">{{ t('searchCocktail.detail-search.feature.historic') }}</option>
-                            <option value="21">{{ t('searchCocktail.detail-search.feature.pousse-cafe') }}</option>
-                            <option value="22">{{ t('searchCocktail.detail-search.feature.good-with-food') }}</option>
-                            <option value="23">{{ t('searchCocktail.detail-search.feature.va-11-hall-1') }}</option>
-                            <option value="24">{{ t('searchCocktail.detail-search.feature.cyberpunk-2077') }}</option>
+                            <option value=1>{{ t('searchCocktail.detail-search.feature.standard') }}</option>
+                            <option value=2>{{ t('searchCocktail.detail-search.feature.original') }}</option>
+                            <option value=3>{{ t('searchCocktail.detail-search.feature.simple') }}</option>
+                            <option value=4>{{ t('searchCocktail.detail-search.feature.light') }}</option>
+                            <option value=5>{{ t('searchCocktail.detail-search.feature.refreshing') }}</option>
+                            <option value=6>{{ t('searchCocktail.detail-search.feature.smooth') }}</option>
+                            <option value=7>{{ t('searchCocktail.detail-search.feature.sharp') }}</option>
+                            <option value=8>{{ t('searchCocktail.detail-search.feature.sour') }}</option>
+                            <option value=9>{{ t('searchCocktail.detail-search.feature.rich') }}</option>
+                            <option value=10>{{ t('searchCocktail.detail-search.feature.strong') }}</option>
+                            <option value=11>{{ t('searchCocktail.detail-search.feature.easy-to-drink') }}</option>
+                            <option value=12>{{ t('searchCocktail.detail-search.feature.sober') }}</option>
+                            <option value=13>{{ t('searchCocktail.detail-search.feature.fun') }}</option>
+                            <option value=14>{{ t('searchCocktail.detail-search.feature.beautiful') }}</option>
+                            <option value=15>{{ t('searchCocktail.detail-search.feature.hot') }}</option>
+                            <option value=16>{{ t('searchCocktail.detail-search.feature.tropical') }}</option>
+                            <option value=17>{{ t('searchCocktail.detail-search.feature.elegant') }}</option>
+                            <option value=18>{{ t('searchCocktail.detail-search.feature.masculine') }}</option>
+                            <option value=19>{{ t('searchCocktail.detail-search.feature.recommended-for-women') }}</option>
+                            <option value=10>{{ t('searchCocktail.detail-search.feature.historic') }}</option>
+                            <option value=21>{{ t('searchCocktail.detail-search.feature.pousse-cafe') }}</option>
+                            <option value=22>{{ t('searchCocktail.detail-search.feature.good-with-food') }}</option>
+                            <option value=23>{{ t('searchCocktail.detail-search.feature.va-11-hall-1') }}</option>
+                            <option value=24>{{ t('searchCocktail.detail-search.feature.cyberpunk-2077') }}</option>
                             </select>
                         </div>
                         <div class="filtering-btn-wrapper">
-                            <button @click="onSearch" class="filtering-btn">Filter</button>
+                            <button @click="fetchCocktailData(currentPage)" class="filtering-btn">Filter</button>
                         </div>
                     </div>
                 </div>
@@ -91,62 +91,90 @@
 </template>
 
 <script>
-    import { defineComponent, defineProps, ref, watch } from 'vue';
+    import { defineComponent, computed, ref, watch, onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
 
     export default defineComponent ({
-        props: {
-            current: {
-                type: Number
-            }
-        },
-        setup(props) {
+        // props: {
+        //     current: {
+        //         type: Number
+        //     }
+        // },
+        setup() {
             const { t } = useI18n();
             const store = useStore();
 
+            const tmp = computed(() => store.state.currentPage);
+            const currentPage = ref(tmp.value);
             const searchValue = ref('');
             const selectedBase = ref('');
             const selectedTaste = ref('');
-            const selectedFeature = ref('');
             const selectedPercentage = ref('');
+            const selectedFeature = ref('');
+            let previousAttributes = { word: '', base: '', taste: '', percentage: '', tag: '' };
             let cocktailData = {};
 
+            onMounted(() => {
+                setPreviousAttributes();
+            });
+
+            //The function for searching cocktail using api
+            //引数なくす
             const fetchCocktailData = async () => {
+                changePageDependingOnAttributes();
+                setPreviousAttributes();
                 cocktailData = await store.dispatch('fetchCocktailData', {
                     word: searchValue.value,
                     base: selectedBase.value,
                     taste: selectedTaste.value,
                     percentage: selectedPercentage.value,
                     tag: selectedFeature.value,
-                    page: props.current
+                    page: currentPage.value
                 });
-                setCocktailData(cocktailData);
+                console.log(cocktailData);
+                await store.dispatch('setCocktailData', cocktailData);
+                const totalOfItems = computed(() => store.getters.cocktailData).value.total_pages * 20;
+                store.dispatch('setCurrentPage', currentPage);
+                store.dispatch('setTotalOfItems', totalOfItems);
+                // console.log(computed(() => store.getters.currentPage).value);
+                // console.log(computed(() => store.getters.totalOfItems).value);
             };
 
-            const setCocktailData = (cocktailData) => {
-                store.dispatch("setCocktailData", cocktailData);
-            }
+            const setPreviousAttributes = () => {
+                previousAttributes.word = searchValue.value;
+                previousAttributes.base = selectedBase.value;
+                previousAttributes.taste = selectedTaste.value;
+                previousAttributes.percentage = selectedPercentage.value;
+                previousAttributes.tag = selectedFeature.value;
+            };
 
-            watch(() => props.current, (newValue, oldValue) => {
-                fetchCocktailData();
+            const changePageDependingOnAttributes = () => {
+                if (previousAttributes.word != searchValue.value
+                    || previousAttributes.base != selectedBase.value
+                    || previousAttributes.taste != selectedTaste.value
+                    || previousAttributes.percentage != selectedPercentage.value
+                    || previousAttributes.tag != selectedFeature.value) {
+                        store.dispatch('setCurrentPage', 1);
+                };
+            };
+
+            watch(tmp, (newValue, oldValue) => {
+                if (tmp.value!= 1) {
+                    fetchCocktailData(currentPage.value);
+                }
             });
 
-            //The function for searching cocktail using api
-            const onSearch = () => {
-                fetchCocktailData();
-            };
             return {
                 t,
                 store,
+                currentPage,
                 searchValue,
                 selectedBase,
                 selectedTaste,
                 selectedFeature,
                 selectedPercentage,
-                setCocktailData,
                 fetchCocktailData,
-                onSearch,
             }
         }
     })

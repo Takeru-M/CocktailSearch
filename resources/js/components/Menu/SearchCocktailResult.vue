@@ -5,7 +5,7 @@
                 <li v-for="result in cocktailData.cocktails" :key="result.cocktail_id">
                     <RouterLink
                     :to="{ name: 'CocktailDetail', params: { id: result.cocktail_id } }"
-                    @click="setSelectedCocktail(result)"
+                    @click="cocktailDetail(result)"
                     >
                         <div class="result-content">
                             <div class="result-content-wrapper">
@@ -47,6 +47,8 @@
     import { useI18n } from 'vue-i18n';
     import { RouterLink } from 'vue-router';
     import { useStore } from 'vuex';
+    import axios from 'axios';
+    import CommonUtils from '../../../utils/common';
 
     export default defineComponent ({
         props: {
@@ -59,7 +61,23 @@
             const store = useStore();
 
             const cocktailData = computed(() => store.getters.cocktailData);
-            const setSelectedCocktail = (result) => {
+
+            const cocktailDetail = async result => {
+                await CommonUtils.registerCocktail(result);
+                await registerHistory(result);
+                setSelectedCocktail(result);
+            }
+
+            const registerHistory = async result => {
+                const userID = computed(() => store.getters.user).value;
+                const response = await axios.post('http://127.0.0.1:8000/api/registerHistory', {
+                    userID: userID.id,
+                    cocktailID: result.cocktail_id
+                });
+                console.log(response.data);
+            }
+
+            const setSelectedCocktail = result => {
                 store.dispatch("setSelectedCocktail", result);
             };
 
@@ -67,6 +85,8 @@
                 t,
                 store,
                 cocktailData,
+                cocktailDetail,
+                registerHistory,
                 setSelectedCocktail,
             };
         },

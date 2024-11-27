@@ -67,10 +67,6 @@
             const onFinishFailed = errorInfo => {
                 console.log('Failed:', errorInfo);
             };
-            // const count = computed(() => store.getters.count);
-            // const increment = () => {
-            //         store.dispatch('increment');
-            //     };
             const login = async () => {
                 try {
                     // バックエンドAPIにPOSTリクエストを送る
@@ -79,7 +75,7 @@
                         password: formState.password,
                     });
                     localStorage.setItem('auth_token', response.data.token);
-                    store.dispatch('login');
+                    store.dispatch('setLoginStatus');
                     store.dispatch('setUser', response.data.user);
                     router.push('/dashboard');
                     // 成功時の処理
@@ -100,8 +96,6 @@
                 onFinish,
                 onFinishFailed,
                 login,
-                // count,
-                // increment,
             };
         }
     })

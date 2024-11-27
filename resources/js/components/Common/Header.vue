@@ -47,7 +47,7 @@
                     },
                 });
                 localStorage.removeItem('auth_token');
-                store.dispatch('logout');
+                store.dispatch('setLogoutStatus');
                 console.log('Logout successful:', response.data);
                 router.push('/login');
             } catch (error) {

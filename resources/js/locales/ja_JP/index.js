@@ -3,6 +3,7 @@ import header from './header.json';
 import footer from './footer.json';
 import searchCocktail from './searchCocktail.json';
 import searchCocktailResult from './searchCocktailResult.json';
+import account from './account.json';
 
 export {
     login,
@@ -10,4 +11,5 @@ export {
     footer,
     searchCocktail,
     searchCocktailResult,
+    account,
 };

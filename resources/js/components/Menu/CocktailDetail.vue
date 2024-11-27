@@ -86,12 +86,8 @@
                 }
             };
 
-            const registerFav = async (user) => {
+            const registerFav = async user => {
                 try {
-                    const responseFromRegisterCocktail = await axios.post('http://127.0.0.1:8000/api/registerCocktail', {
-                        cocktailData: selectedCocktail.value,
-                    });
-                    console.log(responseFromRegisterCocktail.data);
                     const responseFromRegisterFav = await axios.post('http://127.0.0.1:8000/api/registerFav', {
                         userID: user.value.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
@@ -102,7 +98,7 @@
                 }
             };
 
-            const removeFav = async (user) => {
+            const removeFav = async user => {
                 try {
                     const responseFromRemoveFav = await axios.post('http://127.0.0.1:8000/api/removeFav', {
                         userID: user.value.id,
