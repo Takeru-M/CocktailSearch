@@ -93,9 +93,9 @@
                 onFinish,
                 onFinishFailed,
                 signin,
-            }
-        }
-    })
+            };
+        },
+    });
 </script>
 
 <style>

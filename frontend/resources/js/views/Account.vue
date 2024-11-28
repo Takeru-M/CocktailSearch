@@ -102,17 +102,36 @@
             });
 
             const getHistory = async () => {
+                const token = localStorage.getItem('auth_token');
                 const response = await axios.post('http://127.0.0.1:8000/api/getHistory', {
                     userID: user.id
-                });
+                    },
+                    {
+                        headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        }
+                    }
+                );
                 histories.value = response.data.history;
                 // console.log(response.data);
             };
 
             const getFavCocktail = async () => {
+                const token = localStorage.getItem('auth_token');
                 const response = await axios.post('http://127.0.0.1:8000/api/getFavCocktail', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                     userID: user.id
-                });
+                    },
+                    {
+                        headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        }
+                    }
+                );
                 favCocktails.value = response.data.favCocktail;
                 // console.log(response.data);
                 // console.log(favCocktails.value);
@@ -126,9 +145,9 @@
                 getFavCocktail,
                 histories,
                 favCocktails,
-            }
-        }
-    })
+            };
+        },
+    });
 </script>
 
 <style>

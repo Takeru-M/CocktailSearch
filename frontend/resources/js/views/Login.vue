@@ -76,6 +76,7 @@
                     });
                     localStorage.setItem('auth_token', response.data.token);
                     store.dispatch('setLoginStatus');
+                    console.log(computed(() => store.getters.loginStatus).value);
                     store.dispatch('setUser', response.data.user);
                     router.push('/dashboard');
                     // 成功時の処理
@@ -97,8 +98,8 @@
                 onFinishFailed,
                 login,
             };
-        }
-    })
+        },
+    });
 </script>
 
 <style>

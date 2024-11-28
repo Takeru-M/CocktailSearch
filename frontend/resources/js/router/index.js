@@ -1,12 +1,12 @@
+import { computed } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { useStore } from 'vuex';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Account from '../views/Account.vue';
 import SignIn from '../views/SignIn.vue';
 import CocktailDetail from '../components/Menu/CocktailDetail.vue';
 import AccountSetting from '../views/AccountSetting.vue';
-import History from '../views/History.vue';
-import FavCocktails from '../views/FavCocktails.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,39 +19,49 @@ const router = createRouter({
         {
             path: '/signin',
             name: 'siginin',
-            component: SignIn
+            component: SignIn,
         },
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: Dashboard
+            component: Dashboard,
+            meta: {requireAuth: true}
         },
         {
             path: '/account',
             name: 'account',
-            component: Account
+            component: Account,
+            meta: {requireAuth: true}
         },
         {
             path: '/cocktail/:id',
             name: 'CocktailDetail',
-            component: CocktailDetail
+            component: CocktailDetail,
+            meta: {requireAuth: true}
         },
         {
             path: '/setting',
             name: 'AccountSetting',
-            component: AccountSetting
-        },
-        {
-            path: '/history',
-            name: 'history',
-            component: History
-        },
-        {
-            path: '/fav',
-            name: 'favCocktails',
-            component: FavCocktails
+            component: AccountSetting,
+            meta: {requireAuth: true}
         },
     ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+    const store = useStore();
+    const isAuthenticated = computed(() => store.getters.loginStatus);
+    if (to.matched.some(record => record.meta.requireAuth)) {
+      // 認証が必要なページにアクセスしようとしている
+        if (!isAuthenticated.value) {
+            // ログインしていなければログインページにリダイレクト
+            next({ path: '/login' });
+        } else {
+            next(); // ログインしていればそのまま進む
+        }
+    } else {
+      next(); // 認証が不要なページにはそのまま進む
+    }
+});
 
 export default router

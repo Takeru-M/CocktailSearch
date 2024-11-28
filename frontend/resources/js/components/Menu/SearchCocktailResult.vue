@@ -66,16 +66,24 @@
                 await CommonUtils.registerCocktail(result);
                 await registerHistory(result);
                 setSelectedCocktail(result);
-            }
+            };
 
             const registerHistory = async result => {
                 const userID = computed(() => store.getters.user).value;
+                const token = localStorage.getItem('auth_token');
                 const response = await axios.post('http://127.0.0.1:8000/api/registerHistory', {
                     userID: userID.id,
                     cocktailID: result.cocktail_id
-                });
+                    },
+                    {
+                        headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        }
+                    }
+                );
                 console.log(response.data);
-            }
+            };
 
             const setSelectedCocktail = result => {
                 store.dispatch("setSelectedCocktail", result);

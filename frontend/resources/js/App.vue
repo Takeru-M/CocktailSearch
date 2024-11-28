@@ -21,13 +21,13 @@
         },
         setup() {
             const store = useStore();
-            const login = ref(computed(() => store.getters.login));
+            const login = computed(() => store.state.login);
 
             return {
-                login
-            }
-        }
-    })
+                login,
+            };
+        },
+    });
 </script>
 
 <style>

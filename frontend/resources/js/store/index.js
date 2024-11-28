@@ -15,7 +15,7 @@ export default createStore ({
         user (state) {
             return state.user;
         },
-        login (state) {
+        loginStatus (state) {
             return state.login;
         },
         currentPage (state) {
@@ -61,20 +61,20 @@ export default createStore ({
         ex (name, pass) {
             console.log(name, pass);
         },
-        setUser ({commit}, user) {
-            commit('setUser', user);
+        setUser (context, user) {
+            context.commit('setUser', user);
         },
-        setLoginStatus ({commit}) {
-            commit('setLoginStatus');
+        setLoginStatus (context) {
+            context.commit('setLoginStatus');
         },
-        setLogoutStatus ({commit}) {
-            commit('setLogoutStatus');
+        setLogoutStatus (context) {
+            context.commit('setLogoutStatus');
         },
-        setCurrentPage ({commit}, currentPage) {
-            commit('setCurrentPage', currentPage);
+        setCurrentPage (context, currentPage) {
+            context.commit('setCurrentPage', currentPage);
         },
-        setTotalOfItems ({commit}, totalOfItems) {
-            commit('setTotalOfItems', totalOfItems);
+        setTotalOfItems (context, totalOfItems) {
+            context.commit('setTotalOfItems', totalOfItems);
         },
         async fetchCocktailData (context, {word, base, taste, percentage, tag, page}) {
             let alcohol_from = '';
@@ -102,7 +102,11 @@ export default createStore ({
                     break;
             };
             try {
+                const token = localStorage.getItem('auth_token');
                 const response = await axios.get('http://127.0.0.1:8000/api/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                     params: {
                         word: word,
                         base: base,
@@ -118,11 +122,11 @@ export default createStore ({
                 console.error(e.message);
             };
         },
-        async setCocktailData ({ commit }, results) {
-            await commit('setCocktailData', results);
+        setCocktailData (context, results) {
+            context.commit('setCocktailData', results);
         },
-        async setSelectedCocktail ({ commit }, result) {
-            await commit('setSelectedCocktail', result);
+        setSelectedCocktail (context, result) {
+            context.commit('setSelectedCocktail', result);
         },
     },
 });

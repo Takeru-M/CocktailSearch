@@ -34,7 +34,7 @@ export default defineComponent ({
         const store = useStore();
 
         const selectedKeys = ref(['2']);
-        const tmp = computed(() => store.state.currentPage);
+        const tmp = computed(() => store.getters.currentPage);
         let currentPage = ref(tmp.value);
         const totalOfItems = computed(() => store.getters.totalOfItems);
         const searchStatus = ref(false);
@@ -56,8 +56,8 @@ export default defineComponent ({
             cocktailData,
             totalOfItems,
         };
-    }
-})
+    },
+});
 </script>
 
 <style scoped>

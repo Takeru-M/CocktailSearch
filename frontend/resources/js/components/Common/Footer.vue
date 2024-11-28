@@ -14,7 +14,7 @@
         //         ex,
         //     }
         // }
-    })
+    });
 </script>
 
 <style scoped>

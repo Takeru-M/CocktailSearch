@@ -88,10 +88,18 @@
 
             const registerFav = async user => {
                 try {
+                    const token = localStorage.getItem('auth_token');
                     const responseFromRegisterFav = await axios.post('http://127.0.0.1:8000/api/registerFav', {
                         userID: user.value.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
-                    });
+                        },
+                        {
+                            headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                            }
+                        }
+                    );
                     console.log(responseFromRegisterFav.data);
                 } catch (error) {
                     console.error('An error occurred:', error.message);
@@ -103,12 +111,19 @@
                     const responseFromRemoveFav = await axios.post('http://127.0.0.1:8000/api/removeFav', {
                         userID: user.value.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
-                    });
+                        },
+                        {
+                            headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                            }
+                        }
+                    );
                     console.log(responseFromRemoveFav.data);
                 } catch (error) {
                     console.error('An error occurred:', error.message);
                 }
-            }
+            };
 
             return {
                 store,
@@ -119,7 +134,7 @@
                 favBtn,
                 registerFav,
                 removeFav,
-            }
+            };
         },
     });
 </script>

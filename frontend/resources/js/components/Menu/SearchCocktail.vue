@@ -105,7 +105,7 @@
             const { t } = useI18n();
             const store = useStore();
 
-            const tmp = computed(() => store.state.currentPage);
+            const tmp = computed(() => store.getters.currentPage);
             const currentPage = ref(tmp.value);
             const searchValue = ref('');
             const selectedBase = ref('');
@@ -120,7 +120,6 @@
             });
 
             //The function for searching cocktail using api
-            //引数なくす
             const fetchCocktailData = async () => {
                 changePageDependingOnAttributes();
                 setPreviousAttributes();
@@ -175,9 +174,9 @@
                 selectedFeature,
                 selectedPercentage,
                 fetchCocktailData,
-            }
-        }
-    })
+            };
+        },
+    });
 </script>
 
 <style>
