@@ -10,3 +10,7 @@ Route::get('/login', function () {
 // Route::get('/{any}', function () {
 //     return file_get_contents(public_path('build/index.html'));
 // })->where('any', '.*');
+
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
