@@ -73,11 +73,12 @@
                         email: formState.email,
                         password: formState.password
                     });
-                    localStorage.setItem('auth_token', response.data.token);
-                    store.dispatch('login');
+                    store.dispatch('setLoginStatus');
                     store.dispatch('setUser', response.data.user);
+                    console.log(computed(() => store.getters.loginStatus).value);
+                    localStorage.setItem('auth_token', response.data.token);
+                    localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
                     router.push('/dashboard');
-                    console.log('Signin successful:', response.data);
                 } catch (error) {
                     if (error.response) {
                         console.error('Signin failed:', error.response.data.message);

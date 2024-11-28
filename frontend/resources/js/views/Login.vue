@@ -69,21 +69,17 @@
             };
             const login = async () => {
                 try {
-                    // バックエンドAPIにPOSTリクエストを送る
                     const response = await axios.post('http://127.0.0.1:8000/api/login', {
                         name: formState.username,
                         password: formState.password,
                     });
-                    localStorage.setItem('auth_token', response.data.token);
                     store.dispatch('setLoginStatus');
-                    console.log(computed(() => store.getters.loginStatus).value);
                     store.dispatch('setUser', response.data.user);
+                    console.log(computed(() => store.getters.loginStatus).value);
+                    localStorage.setItem('auth_token', response.data.token);
+                    localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
                     router.push('/dashboard');
-                    // 成功時の処理
-                    console.log('Login successful:', response.data);
-                    // ログイン成功後に追加の処理（例: トークンの保存やリダイレクト）を行う
                 } catch (error) {
-                    // エラーメッセージを表示
                     if (error.response) {
                         console.error('Login failed:', error.response.data.message);
                     } else {

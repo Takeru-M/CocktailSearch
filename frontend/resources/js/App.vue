@@ -1,15 +1,15 @@
 <template>
     <a-layout>
-        <Header v-if="login"></Header>
+        <Header v-if="loginStatus"></Header>
         <div class="contents">
             <router-view></router-view>
         </div>
-        <Footer v-if="login"></Footer>
+        <Footer v-if="loginStatus"></Footer>
     </a-layout>
 </template>
 
 <script>
-    import { reactive, ref, computed, defineComponent} from 'vue';
+    import { computed, defineComponent, watch, onMounted } from 'vue';
     import Header from './components/Common/Header.vue';
     import Footer from './components/Common/Footer.vue';
     import { useStore } from 'vuex';
@@ -21,10 +21,17 @@
         },
         setup() {
             const store = useStore();
-            const login = computed(() => store.state.login);
+            let loginStatus = computed(() => store.getters.loginStatus);
+
+            onMounted(() => {
+                const tmp = localStorage.getItem('login_status');
+                if (tmp == 'true') {
+                    store.dispatch('setLoginStatus');
+                }
+            })
 
             return {
-                login,
+                loginStatus,
             };
         },
     });

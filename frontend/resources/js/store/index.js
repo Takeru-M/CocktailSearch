@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default createStore ({
     state: {
-        login: false,
+        loginStatus: false,
         user: {},
         currentPage: 1,
         totalOfItems: 0,
@@ -16,7 +16,7 @@ export default createStore ({
             return state.user;
         },
         loginStatus (state) {
-            return state.login;
+            return state.loginStatus;
         },
         currentPage (state) {
             return state.currentPage;
@@ -36,10 +36,10 @@ export default createStore ({
             state.user = user;
         },
         setLoginStatus (state) {
-            state.login = true;
+            state.loginStatus = true;
         },
         setLogoutStatus (state) {
-            state.login = false;
+            state.loginStatus = false;
         },
         setCurrentPage (state, currentPage) {
             state.currentPage = currentPage;
@@ -58,8 +58,11 @@ export default createStore ({
         }
     },
     actions: {
-        ex (name, pass) {
-            console.log(name, pass);
+        initializeStore({ commit }) {
+            const loginStatus = JSON.parse(localStorage.getItem('loginStatus'));
+            if (loginStatus !== null) {
+                commit('setLoginStatus', loginStatus);
+            }
         },
         setUser (context, user) {
             context.commit('setUser', user);

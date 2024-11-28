@@ -44,6 +44,11 @@ const app = createApp(App);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
+const lastRoute = localStorage.getItem('lastRoute');
+if (lastRoute && lastRoute !== '/login') {
+  router.push(lastRoute); // 保存されたルートに遷移
+}
+
 app.use(store)
     .use(router)
     .use(vueI18n)

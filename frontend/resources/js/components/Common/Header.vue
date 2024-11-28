@@ -40,18 +40,18 @@
 
         const logout = async () => {
             try {
-                const token = localStorage.getItem('auth_token'); // 保存されたトークンを取得
+                const token = localStorage.getItem('auth_token');
                 const response = await axios.post("http://127.0.0.1:8000/api/logout", {}, {
                     headers: {
-                        Authorization: `Bearer ${token}` // トークンをヘッダーに含める
+                        Authorization: `Bearer ${token}`
                     },
                 });
                 localStorage.removeItem('auth_token');
+                localStorage.removeItem('login_status');
                 store.dispatch('setLogoutStatus');
                 console.log('Logout successful:', response.data);
                 router.push('/login');
             } catch (error) {
-                // エラーメッセージを表示
                 if (error.response) {
                     console.error('Logout failed:', error.response.data.message);
                 } else {

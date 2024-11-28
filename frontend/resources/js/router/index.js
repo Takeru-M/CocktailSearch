@@ -50,10 +50,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const store = useStore();
-    const isAuthenticated = computed(() => store.getters.loginStatus);
+    // const isAuthenticated = computed(() => store.getters.loginStatus);
+    const isAuthenticated  = localStorage.getItem('login_status');
     if (to.matched.some(record => record.meta.requireAuth)) {
       // 認証が必要なページにアクセスしようとしている
-        if (!isAuthenticated.value) {
+        if (!isAuthenticated) {
             // ログインしていなければログインページにリダイレクト
             next({ path: '/login' });
         } else {
@@ -62,6 +63,10 @@ router.beforeEach((to, from, next) => {
     } else {
       next(); // 認証が不要なページにはそのまま進む
     }
+
+    // if (to.path !== '/login') {
+    //     localStorage.setItem('lastRoute', to.fullPath); // 現在のルートを保存
+    // }
 });
 
 export default router
