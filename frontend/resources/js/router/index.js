@@ -7,6 +7,8 @@ import Account from '../views/Account.vue';
 import SignIn from '../views/SignIn.vue';
 import CocktailDetail from '../components/Menu/CocktailDetail.vue';
 import AccountSetting from '../views/AccountSetting.vue';
+import History from '../views/History.vue';
+import Favorite from '../views/Favorite.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +45,18 @@ const router = createRouter({
             path: '/setting',
             name: 'AccountSetting',
             component: AccountSetting,
+            meta: {requireAuth: true}
+        },
+        {
+            path: '/history',
+            name: 'History',
+            component: History,
+            meta: {requireAuth: true}
+        },
+        {
+            path: '/favorite',
+            name: 'Favorite',
+            component: Favorite,
             meta: {requireAuth: true}
         },
     ]

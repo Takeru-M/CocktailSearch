@@ -44,9 +44,14 @@ const app = createApp(App);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-const lastRoute = localStorage.getItem('lastRoute');
-if (lastRoute && lastRoute !== '/login') {
-  router.push(lastRoute); // 保存されたルートに遷移
+// const lastRoute = localStorage.getItem('lastRoute');
+// if (lastRoute && lastRoute !== '/login') {
+//   router.push(lastRoute); // 保存されたルートに遷移
+// }
+
+const loginStatus = localStorage.getItem('login_status');
+if (loginStatus == 'true') {
+  router.push('dashboard');
 }
 
 app.use(store)

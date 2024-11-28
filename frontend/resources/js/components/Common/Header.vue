@@ -1,12 +1,10 @@
 <template>
     <a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
-    <!-- <div class="logo" /> -->
     <div class="logo">
         <RouterLink to="/dashboard">{{ t('header.header-logo') }}</RouterLink>
     </div>
     <a-menu
         class="nav-menu"
-        v-model:selectedKeys="selectedKeys"
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
@@ -36,7 +34,6 @@
     setup () {
         const { t } = useI18n();
         const store = useStore();
-        const selectedKeys = ref(['2']);
 
         const logout = async () => {
             try {
