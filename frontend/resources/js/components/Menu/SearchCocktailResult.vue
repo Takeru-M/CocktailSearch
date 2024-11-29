@@ -131,7 +131,7 @@
     .result-content-img {
         height: 100%;
         width: 40%;
-        background-color: red;
+        background-color: rgb(200, 200, 200);
     }
     .result-content-explanation {
         height: 100%;

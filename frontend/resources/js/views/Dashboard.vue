@@ -47,7 +47,6 @@ export default defineComponent ({
         });
 
         watch(currentPage, (newValue, oldValue) => {
-            console.log('A');
             store.dispatch('setCurrentPage', currentPage.value);
         });
 

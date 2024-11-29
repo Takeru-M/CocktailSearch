@@ -114,7 +114,7 @@
             const selectedPercentage = ref<string>('');
             const selectedFeature = ref<number | string>('');
             let previousAttributes: PreviousAttributes = { word: '', base: '', taste: '', percentage: '', tag: '' };
-            let cocktailData: Cocktail | null = null;
+            let cocktailData: Cocktail | null = store.getters.cocktailData;
 
             onMounted(() => {
                 setPreviousAttributes();
@@ -149,7 +149,6 @@
             };
 
             const changePageDependingOnAttributes = (): void => {
-                console.log('B');
                 if (previousAttributes.word != searchValue.value
                     || previousAttributes.base != selectedBase.value
                     || previousAttributes.taste != selectedTaste.value

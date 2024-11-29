@@ -25,7 +25,7 @@
                         </a-space>
                     </div>
                 </div>
-                <ul class="cocktail-items">
+                <ul class="cocktail-items" v-if="histories">
                     <li class="cocktail-item" v-for="history in histories" :key="history.cocktail_id">
                         <RouterLink
                         :to="{ name: 'CocktailDetail', params: { id: 1 } }"
@@ -56,7 +56,7 @@
                         </a-space>
                     </div>
                 </div>
-                <ul class="cocktail-items">
+                <ul class="cocktail-items" v-if="favCocktails">
                     <li class="cocktail-item" v-for="cocktail in favCocktails" :key="cocktail.cocktail_id">
                         <RouterLink
                     :to="{ name: 'CocktailDetail', params: { id: cocktail.cocktail_id } }"
@@ -89,14 +89,14 @@
     import { Cocktail, State} from '@/types/stores/CommonStore';
     import { User } from '@/types/stores/CommonStore';
     import { GetFavCocktail, GetHistoryResponse } from '@/types/responses/AccountResponse';
-import { CocktailResponse } from '@/types/responses/CommonResponse';
+    import { CocktailResponse } from '@/types/responses/CommonResponse';
 
     export default defineComponent ({
         setup() {
             const { t } = useI18n();
             const store = useStore<State>();
-            let histories = ref<CocktailResponse | null>();
-            let favCocktails = ref<CocktailResponse | null>();
+            let histories = ref<CocktailResponse[] | null>([]);
+            let favCocktails = ref<CocktailResponse[] | null>([]);
 
             const user = computed<User>(() => store.getters.user);
 
@@ -205,7 +205,7 @@ import { CocktailResponse } from '@/types/responses/CommonResponse';
     .cocktail-item-img {
         height: 30vh;
         padding: 2%;
-        background-color: red;
+        background-color: rgb(200, 200, 200);
     }
     .cocktail-content-explanation {
         height: 23vh;

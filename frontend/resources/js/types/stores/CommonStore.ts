@@ -15,7 +15,7 @@ export interface State {
 export interface User {
     id: number;
     name: string;
-    emal: string;
+    email: string;
     email_verified: null;
     password: string;
 }

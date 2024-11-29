@@ -9,11 +9,13 @@
         <div class="cocktail-detail">
             <div class="cocktail-detail-wrapper">
                 <div class="cocktail-top">
-                    <div class="cocktail-title">
+                    <div class="cocktail-title" v-if="selectedCocktail">
                         <div class="cocktail-digest">{{ selectedCocktail.cocktail_digest }}</div>
                         <div class="cocktail-name">
-                            <div class="cocktail-name-ja">{{ selectedCocktail.cocktail_name }}</div>
-                            <div class="cocktail-name-en">{{ selectedCocktail.cocktail_name_english }}</div>
+                            <template v-if="selectedCocktail">
+                                <div class="cocktail-name-ja">{{ selectedCocktail.cocktail_name }}</div>
+                                <div class="cocktail-name-en">{{ selectedCocktail.cocktail_name_english }}</div>
+                            </template>
                         </div>
                     </div>
                     <div class="fav-btn-wrapper">
@@ -25,10 +27,10 @@
                         <div class="cocktailo-img"></div>
                     </div>
                     <div class="cocktail-info">
-                        <ul class="cocktail-tags">
+                        <ul class="cocktail-tags" v-if="selectedCocktail">
                             <li class="cocktail-tag" v-for="tag in selectedCocktail.tags" :key="tag.tag_id">{{ tag.tag_name }}</li>
                         </ul>
-                        <ul class="cocktail-attributes">
+                        <ul class="cocktail-attributes" v-if="selectedCocktail">
                             <li class="cocktail-base cocktail-attribute">{{ selectedCocktail.base_name }}</li>
                             <li class="cocktail-technique cocktail-attribute">{{ selectedCocktail.technique_name }}</li>
                             <li class="cocktail-taste cocktail-attribute">{{ selectedCocktail.taste_name }}</li>
@@ -39,13 +41,15 @@
                             <li class="cocktail-type cocktail-attribute">{{ selectedCocktail.type_name }}</li>
                             <li class="cocktail-color cocktail-attribute">{{ selectedCocktail.color_name }}</li>
                         </ul>
-                        <ul class="cocktail-recipes">
+                        <ul class="cocktail-recipes" v-if="selectedCocktail">
                             <li class="cocktail-recipe" v-for="recipe in selectedCocktail.recipes" :key="recipe.ingredient_id">
                                 <div class="recipe-name">{{ recipe.ingredient_name }}</div>
                                 <div class="recipe-amount">{{ recipe.amount }}{{ recipe.unit }}</div>
                             </li>
                         </ul>
-                        <div class="cocktail-desc">{{ selectedCocktail.cocktail_desc }}</div>
+                        <template v-if="selectedCocktail">
+                            <div class="cocktail-desc">{{ selectedCocktail.cocktail_desc }}</div>
+                        </template>
                     </div>
                 </div>
             </div>
