@@ -22,23 +22,27 @@
     </a-layout-header>
 </template>
 
-<script>
-    import { ref, defineComponent } from 'vue';
+<script lang="ts">
+    import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import router from '../../router';
     import { RouterLink } from 'vue-router';
     import axios from 'axios';
+    import { AxiosError } from 'axios';
+    import { State } from '@/types/stores/CommonStore';
+    import { Cocktails } from '@/types/stores/CommonStore';
+    import { LogoutResponse } from '@/types/responses/HeaderResponse';
 
     export default defineComponent ({
     setup () {
         const { t } = useI18n();
-        const store = useStore();
+        const store = useStore<State>();
 
-        const logout = async () => {
+        const logout = async (): Promise<void> => {
             try {
-                const token = localStorage.getItem('auth_token');
-                const response = await axios.post("http://127.0.0.1:8000/api/logout", {}, {
+                const token: string | null = localStorage.getItem('auth_token');
+                const response = await axios.post<LogoutResponse>("http://127.0.0.1:8000/api/logout", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -48,11 +52,11 @@
                 store.dispatch('setLogoutStatus');
                 console.log('Logout successful:', response.data);
                 router.push('/login');
-            } catch (error) {
-                if (error.response) {
-                    console.error('Logout failed:', error.response.data.message);
-                } else {
-                    console.error('An error occurred:', error.message);
+            } catch (e) {
+                if (e instanceof AxiosError && e.response) {
+                    console.error('Logout failed:', e.response.data.message);
+                } else if (e instanceof Error) {
+                    console.error('An error occurred:', e.message);
                 }
             }
         };

@@ -8,11 +8,12 @@
     </a-layout>
 </template>
 
-<script>
+<script lang="ts">
     import { computed, defineComponent, watch, onMounted } from 'vue';
     import Header from './components/Common/Header.vue';
     import Footer from './components/Common/Footer.vue';
     import { useStore } from 'vuex';
+    import { State } from './types/stores/CommonStore';
 
     export default defineComponent ({
         components: {
@@ -20,12 +21,12 @@
             Footer,
         },
         setup() {
-            const store = useStore();
-            let loginStatus = computed(() => store.getters.loginStatus);
+            const store = useStore<State>();
+            let loginStatus = computed<boolean>(() => store.getters.loginStatus);
 
             onMounted(() => {
-                const tmp = localStorage.getItem('login_status');
-                if (tmp == 'true') {
+                const loginStatusFromLocalStorage: string | null = localStorage.getItem('login_status');
+                if (loginStatusFromLocalStorage == 'true') {
                     store.dispatch('setLoginStatus');
                 }
             })

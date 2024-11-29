@@ -9,7 +9,7 @@
             v-model:value="searchValue"
             :placeholder="t('searchCocktail.top-placeholder')"
             style="width: 40vw"
-            @search="fetchCocktailData(currentPage)"
+            @search="fetchCocktailData()"
             />
             </a-space>
             <div class="detail-search-box">
@@ -19,7 +19,7 @@
                     <div class="detail-search-menu">
                         <div class="filtering-menu">
                             <select name="base" id="base-select" v-model="selectedBase" class="filtering-select">
-                            <option value="">{{ t('searchCocktail.detail-search.base.base') }}</option>
+                            <option value=''>{{ t('searchCocktail.detail-search.base.base') }}</option>
                             <option value=1>{{ t('searchCocktail.detail-search.base.gin') }}</option>
                             <option value=2>{{ t('searchCocktail.detail-search.base.voldka') }}</option>
                             <option value=3>{{ t('searchCocktail.detail-search.base.tequila') }}</option>
@@ -34,7 +34,7 @@
                             </select>
 
                             <select name="taste" id="taste-select" v-model="selectedTaste" class="filtering-select">
-                            <option value="">{{ t('searchCocktail.detail-search.taste.taste') }}</option>
+                            <option value=''>{{ t('searchCocktail.detail-search.taste.taste') }}</option>
                             <option value=1>{{ t('searchCocktail.detail-search.taste.sweet') }}</option>
                             <option value=2>{{ t('searchCocktail.detail-search.taste.medium-sweet') }}</option>
                             <option value=3>{{ t('searchCocktail.detail-search.taste.medium') }}</option>
@@ -43,7 +43,7 @@
                             </select>
 
                             <select name="percentage" id="percentage-select" v-model="selectedPercentage" class="filtering-select">
-                            <option value="">{{ t('searchCocktail.detail-search.percentage.percentage') }}</option>
+                            <option value=''>{{ t('searchCocktail.detail-search.percentage.percentage') }}</option>
                             <option value="non-alcohol">{{ t('searchCocktail.detail-search.percentage.non-alcohol') }}</option>
                             <option value="weak">{{ t('searchCocktail.detail-search.percentage.weak') }}</option>
                             <option value="normal">{{ t('searchCocktail.detail-search.percentage.normal') }}</option>
@@ -53,7 +53,7 @@
                             </select>
 
                             <select name="feature" id="feature-select" v-model="selectedFeature" class="filtering-select">
-                            <option value="">{{ t('searchCocktail.detail-search.feature.feature') }}</option>
+                            <option value=''>{{ t('searchCocktail.detail-search.feature.feature') }}</option>
                             <option value=1>{{ t('searchCocktail.detail-search.feature.standard') }}</option>
                             <option value=2>{{ t('searchCocktail.detail-search.feature.original') }}</option>
                             <option value=3>{{ t('searchCocktail.detail-search.feature.simple') }}</option>
@@ -81,7 +81,7 @@
                             </select>
                         </div>
                         <div class="filtering-btn-wrapper">
-                            <button @click="fetchCocktailData(currentPage)" class="filtering-btn">Filter</button>
+                            <button @click="fetchCocktailData()" class="filtering-btn">{{ t('searchCocktail.detail-search.filtering-btn') }}</button>
                         </div>
                     </div>
                 </div>
@@ -90,10 +90,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { defineComponent, computed, ref, watch, onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
+    import { Cocktail, State } from '@/types/stores/CommonStore';
+    import { PreviousAttributes } from '@/types/responses/SearchCocktail';
 
     export default defineComponent ({
         // props: {
@@ -103,24 +105,23 @@
         // },
         setup() {
             const { t } = useI18n();
-            const store = useStore();
+            const store = useStore<State>();
 
-            const tmp = computed(() => store.getters.currentPage);
-            const currentPage = ref(tmp.value);
-            const searchValue = ref('');
-            const selectedBase = ref('');
-            const selectedTaste = ref('');
-            const selectedPercentage = ref('');
-            const selectedFeature = ref('');
-            let previousAttributes = { word: '', base: '', taste: '', percentage: '', tag: '' };
-            let cocktailData = {};
+            const currentPage = computed<number>(() => store.getters.currentPage);
+            const searchValue = ref<string>('');
+            const selectedBase = ref<number | string>('');
+            const selectedTaste = ref<number | string>('');
+            const selectedPercentage = ref<string>('');
+            const selectedFeature = ref<number | string>('');
+            let previousAttributes: PreviousAttributes = { word: '', base: '', taste: '', percentage: '', tag: '' };
+            let cocktailData: Cocktail | null = null;
 
             onMounted(() => {
                 setPreviousAttributes();
             });
 
             //The function for searching cocktail using api
-            const fetchCocktailData = async () => {
+            const fetchCocktailData = async (): Promise<void> => {
                 changePageDependingOnAttributes();
                 setPreviousAttributes();
                 cocktailData = await store.dispatch('fetchCocktailData', {
@@ -133,14 +134,13 @@
                 });
                 console.log(cocktailData);
                 await store.dispatch('setCocktailData', cocktailData);
-                const totalOfItems = computed(() => store.getters.cocktailData).value.total_pages * 20;
-                store.dispatch('setCurrentPage', currentPage);
+                const totalOfItems: number = computed(() => store.getters.cocktailData).value.total_pages * 20;
                 store.dispatch('setTotalOfItems', totalOfItems);
                 // console.log(computed(() => store.getters.currentPage).value);
                 // console.log(computed(() => store.getters.totalOfItems).value);
             };
 
-            const setPreviousAttributes = () => {
+            const setPreviousAttributes = (): void => {
                 previousAttributes.word = searchValue.value;
                 previousAttributes.base = selectedBase.value;
                 previousAttributes.taste = selectedTaste.value;
@@ -148,19 +148,21 @@
                 previousAttributes.tag = selectedFeature.value;
             };
 
-            const changePageDependingOnAttributes = () => {
+            const changePageDependingOnAttributes = (): void => {
+                console.log('B');
                 if (previousAttributes.word != searchValue.value
                     || previousAttributes.base != selectedBase.value
                     || previousAttributes.taste != selectedTaste.value
                     || previousAttributes.percentage != selectedPercentage.value
                     || previousAttributes.tag != selectedFeature.value) {
                         store.dispatch('setCurrentPage', 1);
+                        console.log(store.getters.currentPage);
                 };
             };
 
-            watch(tmp, (newValue, oldValue) => {
-                if (tmp.value!= 1) {
-                    fetchCocktailData(currentPage.value);
+            watch(currentPage, (newValue, oldValue) => {
+                if (currentPage.value!= 1) {
+                    fetchCocktailData();
                 }
             });
 

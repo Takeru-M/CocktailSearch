@@ -10,7 +10,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/sass/app.scss',
-                'resources/js/app.js',
+                'resources/js/app.ts',
             ],
             refresh: true,
         }),
@@ -40,5 +40,10 @@ export default defineConfig({
             vue: 'vue/dist/vue.esm-bundler.js',
         },
     },
+    // root: 'frontend',
     base: '/',
+    build: {
+        outDir: './public/build',
+        assetsDir: 'assets',
+    },
 });

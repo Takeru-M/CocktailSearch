@@ -46,7 +46,7 @@ class ApiController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        return response()->json(['message' => 'History saved successfully', 'history' => $history], 201);
+        return response()->json(['message' => 'History saved successfully'], 201);
     }
 
     public function getHistory (Request $request) {
@@ -92,7 +92,7 @@ class ApiController extends Controller
                     'tags' => json_encode($cocktailData['tags']),
                 ]);
 
-                return response()->json(['message' => 'Cocktail saved successfully', 'cocktailData' => $cocktail], 201);
+                return response()->json(['message' => 'Cocktail saved successfully'], 201);
             } else {
                 return response()->json(['message' => 'Cocktail has been already saved'], 201);
             }
@@ -115,7 +115,7 @@ class ApiController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        return response()->json(['message' => 'Fav cocktail saved successfully', 'fav' => $favorite], 201);
+        return response()->json(['message' => 'Fav cocktail saved successfully'], 201);
     }
 
     public function removeFav (Request $request) {

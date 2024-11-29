@@ -47,43 +47,54 @@
     </div>
 </template>
 
-<script>
-    import { defineComponent, reactive } from 'vue';
+<script lang="ts">
+    import { defineComponent, reactive, computed } from 'vue';
+    import { useStore } from 'vuex';
     import axios from 'axios';
+    import { AxiosError } from 'axios';
     import router from '../router';
+    import { State } from '@/types/stores/CommonStore';
+    import { Signin } from '@/types/responses/SigninResponse';
+
+    interface FormState {
+        username: string;
+        email: string;
+        password: string;
+    }
 
     export default defineComponent ({
         setup() {
-            const formState = reactive({
-            username: '',
-            email: '',
-            password: '',
+            const store = useStore<State>();
+            const formState = reactive<FormState>({
+                username: '',
+                email: '',
+                password: '',
             });
-            const onFinish = values => {
+            const onFinish = (values: any) => {
                 console.log('Success:', values);
             };
-            const onFinishFailed = errorInfo => {
+            const onFinishFailed = (errorInfo: any) => {
                 console.log('Failed:', errorInfo);
             };
 
-            const signin = async() => {
+            const signin = async(): Promise<void> => {
                 try {
-                    const response = await axios.post('http://127.0.0.1:8000/api/signin', {
+                    const response = await axios.post<Signin>('http://127.0.0.1:8000/api/signin', {
                         name: formState.username,
                         email: formState.email,
                         password: formState.password
                     });
                     store.dispatch('setLoginStatus');
                     store.dispatch('setUser', response.data.user);
-                    console.log(computed(() => store.getters.loginStatus).value);
                     localStorage.setItem('auth_token', response.data.token);
                     localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
+                    console.log('Signin successful:', response.data);
                     router.push('/dashboard');
-                } catch (error) {
-                    if (error.response) {
-                        console.error('Signin failed:', error.response.data.message);
-                    } else {
-                        console.error('An error occurred:', error.message);
+                } catch (e) {
+                    if (e instanceof AxiosError && e.response) {
+                    console.error('Registering favorite cocktail failed:', e.response.data.message);
+                    } else if (e instanceof Error) {
+                        console.error('An error occurred:', e.message);
                     }
                 }
             };

@@ -40,15 +40,16 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { ref } from 'vue';
-    import { ClickOutside } from 'element-plus';
     import { defineComponent, defineProps, computed } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { RouterLink } from 'vue-router';
     import { useStore } from 'vuex';
     import axios from 'axios';
-    import CommonUtils from '../../../utils/common';
+    import CommonUtils from '../../../utils/Common';
+    import { State, User, Cocktail, Cocktails } from '@/types/stores/CommonStore';
+    import { RegisterHistory } from '@/types/responses/SearchCocktailResultResponse';
 
     export default defineComponent ({
         props: {
@@ -58,21 +59,21 @@
         },
         setup(props) {
             const { t } = useI18n();
-            const store = useStore();
+            const store = useStore<State>();
 
-            const cocktailData = computed(() => store.getters.cocktailData);
+            const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
 
-            const cocktailDetail = async result => {
+            const cocktailDetail = async (result: Cocktail): Promise<void> => {
                 await CommonUtils.registerCocktail(result);
                 await registerHistory(result);
                 setSelectedCocktail(result);
             };
 
-            const registerHistory = async result => {
-                const userID = computed(() => store.getters.user).value;
-                const token = localStorage.getItem('auth_token');
-                const response = await axios.post('http://127.0.0.1:8000/api/registerHistory', {
-                    userID: userID.id,
+            const registerHistory = async (result: Cocktail): Promise<void> => {
+                const user: User = computed(() => store.getters.user).value;
+                const token: string | null = localStorage.getItem('auth_token');
+                const response = await axios.post<RegisterHistory>('http://127.0.0.1:8000/api/registerHistory', {
+                    userID: user.id,
                     cocktailID: result.cocktail_id
                     },
                     {
@@ -85,7 +86,7 @@
                 console.log(response.data);
             };
 
-            const setSelectedCocktail = result => {
+            const setSelectedCocktail = (result: Cocktail): void => {
                 store.dispatch("setSelectedCocktail", result);
             };
 

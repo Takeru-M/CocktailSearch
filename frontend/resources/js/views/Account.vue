@@ -80,31 +80,35 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { defineComponent, computed, ref, onMounted } from 'vue';
     import { RouterLink } from 'vue-router';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import axios from 'axios';
+    import { Cocktail, State} from '@/types/stores/CommonStore';
+    import { User } from '@/types/stores/CommonStore';
+    import { GetFavCocktail, GetHistoryResponse } from '@/types/responses/AccountResponse';
+import { CocktailResponse } from '@/types/responses/CommonResponse';
 
     export default defineComponent ({
         setup() {
             const { t } = useI18n();
-            const store = useStore();
-            let favCocktails = ref({});
-            let histories = ref({});
+            const store = useStore<State>();
+            let histories = ref<CocktailResponse | null>();
+            let favCocktails = ref<CocktailResponse | null>();
 
-            const user = computed(() => store.getters.user).value;
+            const user = computed<User>(() => store.getters.user);
 
             onMounted(() => {
                 getHistory();
                 getFavCocktail();
             });
 
-            const getHistory = async () => {
-                const token = localStorage.getItem('auth_token');
-                const response = await axios.post('http://127.0.0.1:8000/api/getHistory', {
-                    userID: user.id
+            const getHistory = async (): Promise<void> => {
+                const token: string | null = localStorage.getItem('auth_token');
+                const response = await axios.post<GetHistoryResponse>('http://127.0.0.1:8000/api/getHistory', {
+                    userID: user.value.id
                     },
                     {
                         headers: {
@@ -117,13 +121,13 @@
                 // console.log(response.data);
             };
 
-            const getFavCocktail = async () => {
-                const token = localStorage.getItem('auth_token');
-                const response = await axios.post('http://127.0.0.1:8000/api/getFavCocktail', {
+            const getFavCocktail = async (): Promise<void> => {
+                const token: string | null = localStorage.getItem('auth_token');
+                const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/getFavCocktail', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
-                    userID: user.id
+                    userID: user.value.id
                     },
                     {
                         headers: {

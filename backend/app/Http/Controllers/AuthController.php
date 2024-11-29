@@ -68,8 +68,11 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password), // パスワードのハッシュ化
             ]);
 
+            // APIトークンを発行
+            $token = $user->createToken('API Token')->plainTextToken;
+
             // ユーザー作成成功レスポンス
-            return response()->json(['message' => 'User created successfully']);
+            return response()->json(['token' => $token, 'user' => $user]);
         }
     }
 }

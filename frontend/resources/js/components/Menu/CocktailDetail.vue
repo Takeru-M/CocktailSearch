@@ -54,43 +54,47 @@
     </a-layout-content>
 </template>
 
-<script>
+<script lang="ts">
     import { computed, ref } from 'vue';
     import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useRoute } from 'vue-router';
     import axios from 'axios';
+    import { AxiosError } from 'axios';
     import { HeartFilled } from '@ant-design/icons-vue';
+    import { State } from '@/types/stores/CommonStore';
+    import { User, Cocktail } from '@/types/stores/CommonStore';
+    import { RegisterFavResponse, RemoveFavResponse } from '@/types/responses/CocktailDetailResponse';
 
     export default defineComponent ({
         components: {
             HeartFilled,
         },
         setup() {
-            const store = useStore();
+            const store = useStore<State>();
             const route = useRoute();
 
-            const selectedCocktail = computed(() => store.getters.selectedCocktail);
-            let favFlag = false;
-            const favBtnColor = ref('gray');
+            const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);
+            let favFlag: boolean = false;
+            const favBtnColor = ref<string>('gray');
 
             const favBtn = () => {
-                const user = computed(() => store.getters.user);
+                const user = computed<User>(() => store.getters.user).value;
                 favBtnColor.value = favBtnColor.value === 'gray' ? 'red' : 'gray';
+                const token: string | null = localStorage.getItem('auth_token');
                 if (!favFlag) {
-                    registerFav(user);
+                    registerFav(user, token);
                     favFlag = true;
                 } else {
-                    removeFav(user);
+                    removeFav(user, token);
                     favFlag = false;
                 }
             };
 
-            const registerFav = async user => {
+            const registerFav = async (user: User, token: string | null): Promise<void> => {
                 try {
-                    const token = localStorage.getItem('auth_token');
-                    const responseFromRegisterFav = await axios.post('http://127.0.0.1:8000/api/registerFav', {
-                        userID: user.value.id,
+                    const responseFromRegisterFav = await axios.post<RegisterFavResponse>('http://127.0.0.1:8000/api/registerFav', {
+                        userID: user.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
                         },
                         {
@@ -101,15 +105,19 @@
                         }
                     );
                     console.log(responseFromRegisterFav.data);
-                } catch (error) {
-                    console.error('An error occurred:', error.message);
+                } catch (e) {
+                    if (e instanceof AxiosError && e.response) {
+                    console.error('Registering favorite cocktail failed:', e.response.data.message);
+                    } else if (e instanceof Error) {
+                        console.error('An error occurred:', e.message);
+                    }
                 }
             };
 
-            const removeFav = async user => {
+            const removeFav = async (user: User, token: string | null): Promise<void> => {
                 try {
-                    const responseFromRemoveFav = await axios.post('http://127.0.0.1:8000/api/removeFav', {
-                        userID: user.value.id,
+                    const responseFromRemoveFav = await axios.post<RemoveFavResponse>('http://127.0.0.1:8000/api/removeFav', {
+                        userID: user.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
                         },
                         {
@@ -120,8 +128,12 @@
                         }
                     );
                     console.log(responseFromRemoveFav.data);
-                } catch (error) {
-                    console.error('An error occurred:', error.message);
+                } catch (e) {
+                    if (e instanceof AxiosError && e.response) {
+                        console.error('Removing favorite cocktail failed:', e.response.data.message);
+                    } else if (e instanceof Error) {
+                        console.error('An error occurred:', e.message);
+                    }
                 }
             };
 

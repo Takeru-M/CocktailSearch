@@ -12,18 +12,20 @@
         <div class="cocktail-result">
             <SearchCocktailResult :status="searchStatus"></SearchCocktailResult>
         </div>
-        <div class="pagination" v-if="cocktailData.cocktails">
+        <div class="pagination" v-if="cocktailData">
             <a-pagination v-model:current="currentPage" simple :total="totalOfItems" />
         </div>
     </div>
     </a-layout-content>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, defineComponent, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import SearchCocktail from '../components/Menu/SearchCocktail.vue';
 import SearchCocktailResult from '../components/Menu/SearchCocktailResult.vue';
+import { State } from '@/types/stores/CommonStore';
+import { Cocktails } from '@/types/stores/CommonStore';
 
 export default defineComponent ({
     components: {
@@ -31,26 +33,26 @@ export default defineComponent ({
         SearchCocktailResult
     },
     setup () {
-        const store = useStore();
+        const store = useStore<State>();
 
         const selectedKeys = ref(['2']);
-        const tmp = computed(() => store.getters.currentPage);
-        let currentPage = ref(tmp.value);
-        const totalOfItems = computed(() => store.getters.totalOfItems);
-        const searchStatus = ref(false);
-        const cocktailData = computed(() => store.getters.cocktailData);
+        const currentPageForBind = computed<number>(() => store.getters.currentPage);
+        const currentPage = ref<number>(currentPageForBind.value);
+        const totalOfItems = computed<number>(() => store.getters.totalOfItems);
+        const searchStatus = ref<boolean>(false);
+        const cocktailData = computed<Cocktails | null>(() => store.getters.cocktailData);
 
-        watch(tmp, (newValue, oldValue) => {
-            currentPage.value = tmp.value;
+        watch(currentPageForBind, (newValue: number, oldValue: number) => {
+            currentPage.value = currentPageForBind.value;
         });
 
         watch(currentPage, (newValue, oldValue) => {
+            console.log('A');
             store.dispatch('setCurrentPage', currentPage.value);
-            // console.log(tmp.value);
         });
 
         return {
-            tmp,
+            currentPageForBind,
             currentPage,
             searchStatus,
             cocktailData,
