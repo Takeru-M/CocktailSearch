@@ -51,7 +51,7 @@
                     <div class="all-display-btn">
                         <a-space wrap>
                             <a-button>
-                                <RouterLink to="/fav">{{ t('account.account-btn') }}</RouterLink>
+                                <RouterLink to="/favorite">{{ t('account.account-btn') }}</RouterLink>
                             </a-button>
                         </a-space>
                     </div>
@@ -82,11 +82,10 @@
 
 <script lang="ts">
     import { defineComponent, computed, ref, onMounted } from 'vue';
-    import { RouterLink } from 'vue-router';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import axios from 'axios';
-    import { Cocktail, State} from '@/types/stores/CommonStore';
+    import { State } from '@/types/stores/CommonStore';
     import { User } from '@/types/stores/CommonStore';
     import { GetFavCocktail, GetHistoryResponse } from '@/types/responses/AccountResponse';
     import { CocktailResponse } from '@/types/responses/CommonResponse';
@@ -105,6 +104,7 @@
                 getFavCocktail();
             });
 
+            //Get the histories of the user from the database
             const getHistory = async (): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
                 const response = await axios.post<GetHistoryResponse>('http://127.0.0.1:8000/api/getHistory', {
@@ -118,9 +118,10 @@
                     }
                 );
                 histories.value = response.data.history;
-                // console.log(response.data);
+                console.log(response.data.message);
             };
 
+            //Get the favorie cocktails of the user from the database
             const getFavCocktail = async (): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
                 const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/getFavCocktail', {
@@ -137,8 +138,7 @@
                     }
                 );
                 favCocktails.value = response.data.favCocktail;
-                // console.log(response.data);
-                // console.log(favCocktails.value);
+                console.log(response.data.message);
             };
 
             return {

@@ -21,52 +21,50 @@ class ApiController extends Controller
         $alcohol_to = $request->query('alcohol_to');
         $page = $request->query('page');
 
-        $response = Http::get('https://cocktail-f.com/api/v1/cocktails', [
-            'word' => $word,
-            'base' => $base,
-            'taste' => $taste,
-            'tag' => $tag,
-            'alcohol_from' => $alcohol_from,
-            'alcohol_to' => $alcohol_to,
-            'page' => $page
-        ]);
-        return $response->json();
+        try {
+            $response = Http::get('https://cocktail-f.com/api/v1/cocktails', [
+                'word' => $word,
+                'base' => $base,
+                'taste' => $taste,
+                'tag' => $tag,
+                'alcohol_from' => $alcohol_from,
+                'alcohol_to' => $alcohol_to,
+                'page' => $page
+            ]);
+            return $response->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function registerHistory (Request $request) {
-        $data = $request->all();
-        $userID = $data['userID'];
-        $cocktailID = $data['cocktailID'];
+        $userID = $request->input('userID');
+        $cocktailID = $request->input('cocktailID');
 
         try {
             $history = History::create([
                 'user_id' => $userID,
                 'cocktail_id' => $cocktailID,
             ]);
+            return response()->json(['message' => 'History saved successfully'], 201);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        return response()->json(['message' => 'History saved successfully'], 201);
     }
 
     public function getHistory (Request $request) {
-        $data = $request->all();
-        $userID = $data['userID'];
+        $userID = $request->input('userID');
         try {
             $cocktailID = History::where('user_id', $userID)->orderBy('created_at', 'desc')->take(5)->pluck('cocktail_id');
             $history = Cocktail::whereIn('cocktail_id', $cocktailID)->get();
-            return response()->json(['message' => "Get history successfully", "history" => $history]);
+            return response()->json(['message' => "Get history successfully", "history" => $history], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
     }
 
-    //Register cocktails to cocktails table
     public function registerCocktail (Request $request) {
-        $data = $request->all();
-        $cocktailData = $data['cocktailData'];
-
-        //If there's always the same cocktail, the transaction won't done.
+        $cocktailData = $request->input('cocktailData');
 
         try {
             $record = Cocktail::where('cocktail_id', $cocktailData['cocktail_id'])
@@ -91,7 +89,6 @@ class ApiController extends Controller
                     'recipes' => json_encode($cocktailData['recipes']),
                     'tags' => json_encode($cocktailData['tags']),
                 ]);
-
                 return response()->json(['message' => 'Cocktail saved successfully'], 201);
             } else {
                 return response()->json(['message' => 'Cocktail has been already saved'], 201);
@@ -101,27 +98,24 @@ class ApiController extends Controller
         }
     }
 
-    //Register favCocktails to favorites table
     public function registerFav (Request $request) {
-        $data = $request->all();
-        $userID = $data['userID'];
-        $cocktailID = $data['cocktailID'];
+        $userID = $request->input('userID');
+        $cocktailID = $request->input('cocktailID');
 
         try {
             $favorite = Favorite::create([
                 'user_id' => $userID,
                 'cocktail_id' => $cocktailID,
             ]);
+            return response()->json(['message' => 'Fav cocktail saved successfully'], 201);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        return response()->json(['message' => 'Fav cocktail saved successfully'], 201);
     }
 
     public function removeFav (Request $request) {
-        $data = $request->all();
-        $userID = $data['userID'];
-        $cocktailID = $data['cocktailID'];
+        $userID = $request->input('userID');
+        $cocktailID = $request->input('cocktailID');
 
         try {
             $record = Favorite::where('user_id', $userID)
@@ -140,8 +134,7 @@ class ApiController extends Controller
     }
 
     public function getFavCocktail (Request $request) {
-        $data = $request->all();
-        $userID = $data['userID'];
+        $userID = $request->input('userID');
         try {
             $favCocktailID = Favorite::where('user_id', $userID)->orderBy('created_at', 'asc')->take(5)->pluck('cocktail_id');
             $favCocktail = Cocktail::whereIn('cocktail_id', $favCocktailID)->get();

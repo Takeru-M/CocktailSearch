@@ -13,29 +13,24 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // バリデーション
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'password' => 'required',
-            // 'email' => 'required|email',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        // ユーザーを取得
-        // $user = User::where('email', $request->email)->first();
-        $user = User::where('name', $request->name)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // APIトークンを発行
         $token = $user->createToken('API Token')->plainTextToken;
 
-        return response()->json(['token' => $token, 'user' => $user]);
+        return response()->json(['message' => 'Logged in', 'token' => $token, 'user' => $user]);
     }
 
     public function logout(Request $request)
@@ -54,25 +49,21 @@ class AuthController extends Controller
 
     public function signin (Request $request) {
         {
-            // リクエストバリデーション
             $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:8', // パスワード確認フィールドが必要
+                'password' => 'required|string|min:8',
             ]);
 
-            // ユーザーの作成
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password), // パスワードのハッシュ化
+                'password' => Hash::make($request->password),
             ]);
 
-            // APIトークンを発行
             $token = $user->createToken('API Token')->plainTextToken;
 
-            // ユーザー作成成功レスポンス
-            return response()->json(['token' => $token, 'user' => $user]);
+            return response()->json(['message' => 'Signed in', 'token' => $token, 'user' => $user]);
         }
     }
 }

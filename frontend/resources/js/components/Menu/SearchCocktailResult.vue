@@ -33,7 +33,7 @@
                     </RouterLink>
                 </li>
             </ul>
-            <div v-else-if="status" class="no-result-msg">
+            <div v-else class="no-result-msg">
                 <h3>No results found.</h3>
             </div>
         </div>
@@ -41,23 +41,17 @@
 </template>
 
 <script lang="ts">
-    import { ref } from 'vue';
     import { defineComponent, defineProps, computed } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { RouterLink } from 'vue-router';
     import { useStore } from 'vuex';
     import axios from 'axios';
-    import CommonUtils from '../../../utils/Common';
+    import CommonUtils from '@/utils/Common';
     import { State, User, Cocktail, Cocktails } from '@/types/stores/CommonStore';
     import { RegisterHistory } from '@/types/responses/SearchCocktailResultResponse';
 
     export default defineComponent ({
-        props: {
-            status: {
-                type: Boolean,
-            },
-        },
-        setup(props) {
+        setup() {
             const { t } = useI18n();
             const store = useStore<State>();
 
@@ -69,6 +63,7 @@
                 setSelectedCocktail(result);
             };
 
+            //Register the data of the cocktail and user to the database
             const registerHistory = async (result: Cocktail): Promise<void> => {
                 const user: User = computed(() => store.getters.user).value;
                 const token: string | null = localStorage.getItem('auth_token');
@@ -83,9 +78,10 @@
                         }
                     }
                 );
-                console.log(response.data);
+                console.log(response.data.message);
             };
 
+            //Set the data of selected cocktail to store
             const setSelectedCocktail = (result: Cocktail): void => {
                 store.dispatch("setSelectedCocktail", result);
             };

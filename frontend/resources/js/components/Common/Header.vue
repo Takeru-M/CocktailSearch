@@ -9,14 +9,11 @@
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
     >
-        <!-- <a-menu-item key="1">
-            <RouterLink to="/menu">{{ t('header.nav.nav1') }}</RouterLink>
-        </a-menu-item> -->
-        <a-menu-item key="2">
-            <RouterLink to="/account">{{ t('header.nav.nav2') }}</RouterLink>
+        <a-menu-item key="1">
+            <RouterLink to="/account">{{ t('header.nav.nav1') }}</RouterLink>
         </a-menu-item>
-        <a-menu-item key="3">
-            <RouterLink to="/login" @click="logout">{{ t('header.nav.nav3') }}</RouterLink>
+        <a-menu-item key="2">
+            <RouterLink to="/login" @click="logout">{{ t('header.nav.nav2') }}</RouterLink>
         </a-menu-item>
     </a-menu>
     </a-layout-header>
@@ -26,12 +23,10 @@
     import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
-    import router from '../../router';
-    import { RouterLink } from 'vue-router';
+    import router from '@/router';
     import axios from 'axios';
     import { AxiosError } from 'axios';
     import { State } from '@/types/stores/CommonStore';
-    import { Cocktails } from '@/types/stores/CommonStore';
     import { LogoutResponse } from '@/types/responses/HeaderResponse';
 
     export default defineComponent ({
@@ -50,7 +45,7 @@
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('login_status');
                 store.dispatch('setLogoutStatus');
-                console.log('Logout successful:', response.data);
+                console.log('Logout successful:', response.data.message);
                 router.push('/login');
             } catch (e) {
                 if (e instanceof AxiosError && e.response) {

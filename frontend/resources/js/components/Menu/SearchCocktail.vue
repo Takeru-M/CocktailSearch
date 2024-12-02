@@ -98,11 +98,6 @@
     import { PreviousAttributes } from '@/types/responses/SearchCocktail';
 
     export default defineComponent ({
-        // props: {
-        //     current: {
-        //         type: Number
-        //     }
-        // },
         setup() {
             const { t } = useI18n();
             const store = useStore<State>();
@@ -120,7 +115,7 @@
                 setPreviousAttributes();
             });
 
-            //The function for searching cocktail using api
+            //Search cocktails using api and register data to store
             const fetchCocktailData = async (): Promise<void> => {
                 changePageDependingOnAttributes();
                 setPreviousAttributes();
@@ -134,12 +129,11 @@
                 });
                 console.log(cocktailData);
                 await store.dispatch('setCocktailData', cocktailData);
-                const totalOfItems: number = computed(() => store.getters.cocktailData).value.total_pages * 20;
+                const totalOfItems: number | null = computed(() => store.getters.cocktailData).value.total_pages * 20;
                 store.dispatch('setTotalOfItems', totalOfItems);
-                // console.log(computed(() => store.getters.currentPage).value);
-                // console.log(computed(() => store.getters.totalOfItems).value);
             };
 
+            //Set attributes for deciding if fetching data automatically
             const setPreviousAttributes = (): void => {
                 previousAttributes.word = searchValue.value;
                 previousAttributes.base = selectedBase.value;
@@ -148,6 +142,7 @@
                 previousAttributes.tag = selectedFeature.value;
             };
 
+            //Set current page as one if any attribute is changed
             const changePageDependingOnAttributes = (): void => {
                 if (previousAttributes.word != searchValue.value
                     || previousAttributes.base != selectedBase.value
@@ -155,10 +150,10 @@
                     || previousAttributes.percentage != selectedPercentage.value
                     || previousAttributes.tag != selectedFeature.value) {
                         store.dispatch('setCurrentPage', 1);
-                        console.log(store.getters.currentPage);
                 };
             };
 
+            //Fetch data automatically if attributes aren't changed,
             watch(currentPage, (newValue, oldValue) => {
                 if (currentPage.value!= 1) {
                     fetchCocktailData();

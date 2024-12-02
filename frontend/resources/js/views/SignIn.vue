@@ -88,7 +88,7 @@
                     store.dispatch('setUser', response.data.user);
                     localStorage.setItem('auth_token', response.data.token);
                     localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
-                    console.log('Signin successful:', response.data);
+                    console.log('Signin successful:', response.data.message);
                     router.push('/dashboard');
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {

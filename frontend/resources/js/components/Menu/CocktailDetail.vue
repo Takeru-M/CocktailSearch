@@ -82,7 +82,8 @@
             let favFlag: boolean = false;
             const favBtnColor = ref<string>('gray');
 
-            const favBtn = () => {
+            //Register and remove the favorite cocktial if the button is pushed
+            const favBtn = (): void => {
                 const user = computed<User>(() => store.getters.user).value;
                 favBtnColor.value = favBtnColor.value === 'gray' ? 'red' : 'gray';
                 const token: string | null = localStorage.getItem('auth_token');
@@ -95,6 +96,7 @@
                 }
             };
 
+            //Register the favorite cocktail from the database
             const registerFav = async (user: User, token: string | null): Promise<void> => {
                 try {
                     const responseFromRegisterFav = await axios.post<RegisterFavResponse>('http://127.0.0.1:8000/api/registerFav', {
@@ -108,7 +110,7 @@
                             }
                         }
                     );
-                    console.log(responseFromRegisterFav.data);
+                    console.log(responseFromRegisterFav.data.message);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                     console.error('Registering favorite cocktail failed:', e.response.data.message);
@@ -118,6 +120,7 @@
                 }
             };
 
+            //Remove the favorite cocktail from the database
             const removeFav = async (user: User, token: string | null): Promise<void> => {
                 try {
                     const responseFromRemoveFav = await axios.post<RemoveFavResponse>('http://127.0.0.1:8000/api/removeFav', {
@@ -131,7 +134,7 @@
                             }
                         }
                     );
-                    console.log(responseFromRemoveFav.data);
+                    console.log(responseFromRemoveFav.data.message);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                         console.error('Removing favorite cocktail failed:', e.response.data.message);
@@ -189,7 +192,7 @@
     }
     .cocktail-img-wrapper {
         width: 40%;
-        background-color: red;
+        background-color: rgb(200, 200, 200);
     }
     .cocktail-info {
         width: 60%;

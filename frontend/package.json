@@ -8,6 +8,7 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
+        "@testing-library/jest-dom": "^6.6.3",
         "@vitejs/plugin-vue": "^4.6.2",
         "@vue/compiler-sfc": "^3.5.13",
         "@vue/test-utils": "^2.4.6",
@@ -15,6 +16,7 @@
         "axios": "^1.7.4",
         "bootstrap": "^5.2.3",
         "concurrently": "^9.0.1",
+        "jsdom": "^25.0.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.49",
         "sass": "^1.56.1",

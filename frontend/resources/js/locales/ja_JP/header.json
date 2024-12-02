@@ -1,8 +1,7 @@
 {
     "header-logo": "CocktailSearch",
     "nav": {
-        "nav1": "カクテルを探す",
-        "nav2": "アカウント",
-        "nav3": "ログアウト"
+        "nav1": "アカウント",
+        "nav2": "ログアウト"
     }
 }

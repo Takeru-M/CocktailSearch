@@ -19,12 +19,12 @@
                     @finishFailed="onFinishFailed"
                 >
                     <a-form-item
-                    class="name-form"
-                    :label="t('login.username')"
-                    name="username"
-                    :rules="[{ required: true, message: 'Please input your username!' }]"
+                    class="email-form"
+                    :label="t('login.email')"
+                    name="email"
+                    :rules="[{ required: true, message: 'Please input your email!' }]"
                     >
-                    <a-input v-model:value="formState.username" />
+                    <a-input v-model:value="formState.email" />
                     </a-form-item>
 
                     <a-form-item
@@ -57,7 +57,7 @@
     import { Login } from '@/types/responses/LoginResponse';
 
     interface FormState {
-        username: string;
+        email: string;
         password: string;
     }
 
@@ -66,7 +66,7 @@
             const { t } = useI18n();
             const store = useStore<State>();
             const formState = reactive<FormState>({
-                username: '',
+                email: '',
                 password: '',
             });
             const onFinish = (values: any) => {
@@ -78,14 +78,14 @@
             const login = async (): Promise<void> => {
                 try {
                     const response = await axios.post<Login>('http://127.0.0.1:8000/api/login', {
-                        name: formState.username,
+                        email: formState.email,
                         password: formState.password,
                     });
                     store.dispatch('setLoginStatus');
                     store.dispatch('setUser', response.data.user);
                     localStorage.setItem('auth_token', response.data.token);
                     localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
-                    console.log('Login successful:', response.data);
+                    console.log('Login successful:', response.data.message);
                     router.push('/dashboard');
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
@@ -123,7 +123,7 @@
         width: 80vw;
         margin: 25vh auto 0 auto;
     }
-    .name-form{
+    .email-form{
         position: relative;
         left: 15vw;
         width: 50%;
