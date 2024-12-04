@@ -12,6 +12,7 @@ export default createStore<State> ({
         selectedCocktailID: 0,
         cocktailData: null,
         selectedCocktail: null,
+        searchStatus: false,
     },
     getters: {
         user (state: State): User | null {
@@ -31,6 +32,9 @@ export default createStore<State> ({
         },
         selectedCocktail (state: State): Cocktail | null {
             return state.selectedCocktail;
+        },
+        searchStatus (state: State): boolean {
+            return state.searchStatus;
         }
     },
     mutations: {
@@ -57,6 +61,9 @@ export default createStore<State> ({
         },
         setSelectedCocktail (state: State, result: Cocktail): void {
             state.selectedCocktail = result;
+        },
+        setSearchStatus (state: State): void {
+            state.searchStatus = true;
         }
     },
     actions: {
@@ -137,5 +144,8 @@ export default createStore<State> ({
         setSelectedCocktail (context: CommonActionContext, result: Cocktail): void {
             context.commit('setSelectedCocktail', result);
         },
+        setSearchStatus (context: CommonActionContext): void {
+            context.commit('setSearchStatus');
+        }
     },
 });

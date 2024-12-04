@@ -24,6 +24,13 @@
         <env name="CACHE_STORE" value="array"/>
         <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
         <!-- <env name="DB_DATABASE" value=":memory:"/> -->
+        <!-- .env.testing ファイルを読み込む -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_DATABASE" value="test_cocktail_search"/> <!-- テスト用のデータベース名 -->
+        <env name="DB_USERNAME" value="TestTakeru"/> <!-- テスト用のユーザー名 -->
+        <env name="DB_PASSWORD" value="Takeru"/> <!-- テスト用のパスワード -->
         <env name="MAIL_MAILER" value="array"/>
         <env name="PULSE_ENABLED" value="false"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

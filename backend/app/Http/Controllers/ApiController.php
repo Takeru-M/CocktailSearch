@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
-    public function fetchDataOfCocktail(Request $request)
-    {
+    public function fetchDataOfCocktail(Request $request){
         $word = $request->query('word');
         $base = $request->query('base');
         $taste = $request->query('taste');
@@ -32,32 +31,6 @@ class ApiController extends Controller
                 'page' => $page
             ]);
             return $response->json();
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-    }
-
-    public function registerHistory (Request $request) {
-        $userID = $request->input('userID');
-        $cocktailID = $request->input('cocktailID');
-
-        try {
-            $history = History::create([
-                'user_id' => $userID,
-                'cocktail_id' => $cocktailID,
-            ]);
-            return response()->json(['message' => 'History saved successfully'], 201);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-    }
-
-    public function getHistory (Request $request) {
-        $userID = $request->input('userID');
-        try {
-            $cocktailID = History::where('user_id', $userID)->orderBy('created_at', 'desc')->take(5)->pluck('cocktail_id');
-            $history = Cocktail::whereIn('cocktail_id', $cocktailID)->get();
-            return response()->json(['message' => "Get history successfully", "history" => $history], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -93,6 +66,34 @@ class ApiController extends Controller
             } else {
                 return response()->json(['message' => 'Cocktail has been already saved'], 201);
             }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response(500);
+        }
+    }
+
+    public function registerHistory (Request $request) {
+        $userID = $request->input('userID');
+        $cocktailID = $request->input('cocktailID');
+
+        try {
+            $history = History::create([
+                'user_id' => $userID,
+                'cocktail_id' => $cocktailID,
+            ]);
+            return response()->json(['message' => 'History saved successfully'], 201);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
+
+    public function getHistory (Request $request) {
+        $userID = $request->input('userID');
+        try {
+            $cocktailID = History::where('user_id', $userID)->orderBy('created_at', 'desc')->take(5)->pluck('cocktail_id');
+            $history = Cocktail::whereIn('cocktail_id', $cocktailID)->get();
+            return response()->json(['message' => "Get history successfully", "history" => $history], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

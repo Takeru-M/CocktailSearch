@@ -12,7 +12,7 @@
         <div class="cocktail-result">
             <SearchCocktailResult></SearchCocktailResult>
         </div>
-        <div class="pagination" v-if="cocktailData">
+        <div class="pagination" v-if="searchStatus">
             <a-pagination v-model:current="currentPage" simple :total="totalOfItems" />
         </div>
     </div>
@@ -38,7 +38,8 @@ export default defineComponent ({
         const currentPageForBind = computed<number>(() => store.getters.currentPage);
         const currentPage = ref<number>(currentPageForBind.value);
         const totalOfItems = computed<number>(() => store.getters.totalOfItems);
-        const cocktailData = computed<Cocktails | null>(() => store.getters.cocktailData);
+        const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
+        const searchStatus = computed<boolean>(() => store.getters.searchStatus);
 
         watch(currentPageForBind, (newValue: number, oldValue: number) => {
             currentPage.value = currentPageForBind.value;
@@ -53,6 +54,7 @@ export default defineComponent ({
             currentPage,
             cocktailData,
             totalOfItems,
+            searchStatus,
         };
     },
 });

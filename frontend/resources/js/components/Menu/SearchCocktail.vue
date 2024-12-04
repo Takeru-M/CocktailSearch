@@ -129,8 +129,9 @@
                 });
                 console.log(cocktailData);
                 await store.dispatch('setCocktailData', cocktailData);
-                const totalOfItems: number | null = computed(() => store.getters.cocktailData).value.total_pages * 20;
+                const totalOfItems: number | null = computed(() => store.getters.cocktailData).value.total_pages * 10;
                 store.dispatch('setTotalOfItems', totalOfItems);
+                store.dispatch('setSearchStatus');
             };
 
             //Set attributes for deciding if fetching data automatically
@@ -153,11 +154,8 @@
                 };
             };
 
-            //Fetch data automatically if attributes aren't changed,
             watch(currentPage, (newValue, oldValue) => {
-                if (currentPage.value!= 1) {
-                    fetchCocktailData();
-                }
+                fetchCocktailData();
             });
 
             return {

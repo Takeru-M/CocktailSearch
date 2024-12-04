@@ -10,6 +10,7 @@ export interface State {
     selectedCocktailID: number;
     cocktailData: Cocktails | null;
     selectedCocktail: Cocktail | null;
+    searchStatus: boolean;
 }
 
 export interface User {

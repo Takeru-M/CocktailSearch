@@ -33,7 +33,7 @@
                     </RouterLink>
                 </li>
             </ul>
-            <div v-else class="no-result-msg">
+            <div v-else-if="searchStatus" class="no-result-msg">
                 <h3>No results found.</h3>
             </div>
         </div>
@@ -55,6 +55,7 @@
             const { t } = useI18n();
             const store = useStore<State>();
 
+            const searchStatus = computed<boolean>(() => store.getters.searchStatus);
             const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
 
             const cocktailDetail = async (result: Cocktail): Promise<void> => {
@@ -89,6 +90,7 @@
             return {
                 t,
                 store,
+                searchStatus,
                 cocktailData,
                 cocktailDetail,
                 registerHistory,
