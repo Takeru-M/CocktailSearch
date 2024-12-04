@@ -28,4 +28,9 @@ class Cocktail extends Model
         'recipes',
         'tags'
     ];
+
+    protected $casts = [
+        'recipes' => 'array',
+        'tags' => 'array',
+    ];
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/dashboard', [ApiController::class, 'fetchDataOfCocktail']);
     Route::post('/registerCocktail', [ApiController::class, 'registerCocktail']);
+    Route::post('/getCocktail', [ApiController::class, 'getCocktail']);
     Route::post('/registerHistory', [ApiController::class, 'registerHistory']);
     Route::post('/getHistory', [ApiController::class, 'getHistory']);
     Route::post('/registerFav', [ApiController::class, 'registerFav']);

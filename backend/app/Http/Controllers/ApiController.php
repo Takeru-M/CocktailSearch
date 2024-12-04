@@ -72,6 +72,22 @@ class ApiController extends Controller
         }
     }
 
+    public function getCocktail (Request $request) {
+        $cocktailID = $request->input('cocktailID');
+
+        try {
+            $cocktail = Cocktail::where('cocktail_id', $cocktailID)->first();
+            if (!$cocktail) {
+                return response()->json(['error' => 'Cocktail not found'], 404);
+            } else {
+                return response()->json(['message' => 'Get cocktail successfully', 'cocktail' => $cocktail]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
+
     public function registerHistory (Request $request) {
         $userID = $request->input('userID');
         $cocktailID = $request->input('cocktailID');

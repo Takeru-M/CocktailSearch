@@ -28,8 +28,8 @@
                 <ul class="cocktail-items" v-if="histories">
                     <li class="cocktail-item" v-for="history in histories" :key="history.cocktail_id">
                         <RouterLink
-                        :to="{ name: 'CocktailDetail', params: { id: 1 } }"
-                        @click=""
+                        :to="{ name: 'CocktailDetail', params: { id: history.cocktail_id } }"
+                        @click="setSelectedCocktail(history.cocktail_id)"
                         >
                             <div class="cocktail-item-img"></div>
                             <div class="cocktail-content-explanation">
@@ -59,9 +59,9 @@
                 <ul class="cocktail-items" v-if="favCocktails">
                     <li class="cocktail-item" v-for="cocktail in favCocktails" :key="cocktail.cocktail_id">
                         <RouterLink
-                    :to="{ name: 'CocktailDetail', params: { id: cocktail.cocktail_id } }"
-                    @click=""
-                    >
+                        :to="{ name: 'CocktailDetail', params: { id: cocktail.cocktail_id } }"
+                        @click="setSelectedCocktail(cocktail.cocktail_id)"
+                        >
                             <div class="cocktail-item-img"></div>
                             <div class="cocktail-content-explanation">
                                 <div class="cocktail-content-explanation-wrapper">
@@ -89,6 +89,7 @@
     import { User } from '@/types/stores/CommonStore';
     import { GetFavCocktail, GetHistoryResponse } from '@/types/responses/AccountResponse';
     import { CocktailResponse } from '@/types/responses/CommonResponse';
+import { GetCocktailResponse } from '@/types/responses/GetCocktail';
 
     export default defineComponent ({
         setup() {
@@ -125,30 +126,45 @@
             const getFavCocktail = async (): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
                 const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/getFavCocktail', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    userID: user.value.id
+                        userID: user.value.id
                     },
                     {
                         headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        }
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
                     }
                 );
                 favCocktails.value = response.data.favCocktail;
                 console.log(response.data.message);
             };
 
+            const setSelectedCocktail = async (cocktail_id: number): Promise<void> => {
+                const token: string | null = localStorage.getItem('auth_token');
+                const response = await axios.post<GetCocktailResponse>('http://127.0.0.1:8000/api/getCocktail', {
+                        cocktailID: cocktail_id,
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                console.log(response.data.message);
+                store.dispatch('setSelectedCocktail', response.data.cocktail);
+                console.log(store.state.selectedCocktail);
+            }
+
             return {
                 t,
                 store,
                 user,
-                getHistory,
-                getFavCocktail,
                 histories,
                 favCocktails,
+                getHistory,
+                getFavCocktail,
+                setSelectedCocktail,
             };
         },
     });
