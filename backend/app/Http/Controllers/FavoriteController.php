@@ -6,9 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Favorite;
 use App\Models\Cocktail;
+use App\Services\CocktailService;
+use App\Services\FavoriteService;
 
 class FavoriteController extends Controller
 {
+    protected $favoriteService;
+    protected $cocktailService;
+
+    public function __construct(FavoriteService $favoriteService, CocktailService $cocktailService)
+    {
+        $this->favoriteService = $favoriteService;
+        $this->cocktailService = $cocktailService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,11 +44,8 @@ class FavoriteController extends Controller
         $cocktailID = $request->input('cocktailID');
 
         try {
-            $favorite = Favorite::create([
-                'user_id' => $userID,
-                'cocktail_id' => $cocktailID,
-            ]);
-            return response()->json(['message' => 'Fav cocktail saved successfully'], 201);
+            $result = $this->favoriteService->createFavorite($userID, $cocktailID);
+            return response()->json(['message' => $result['message']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -81,16 +88,8 @@ class FavoriteController extends Controller
         $cocktailID = $request->input('cocktailID');
 
         try {
-            $record = Favorite::where('user_id', $userID)
-                                ->where('cocktail_id', $cocktailID)
-                                ->first();
-
-            if ($record) {
-                $record->delete();
-                return response()->json(['message' => 'Fav cocktail deleted successfully.'], 200);
-            } else {
-                return response()->json(['message' => 'No record found.'], 404);
-            }
+            $result = $this->favoriteService->removeFavorite($userID, $cocktailID);
+            return response()->json(['message' => $result['message']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -99,9 +98,9 @@ class FavoriteController extends Controller
     public function getFiveFavCocktails (Request $request) {
         $userID = $request->input('userID');
         try {
-            $favCocktailID = Favorite::where('user_id', $userID)->orderBy('created_at', 'asc')->take(5)->pluck('cocktail_id');
-            $favCocktail = Cocktail::whereIn('cocktail_id', $favCocktailID)->get();
-            return response()->json(['message' => "Get fav data successfully", "favCocktail" => $favCocktail]);
+            $CocktailID = $this->favoriteService->getFiveFavorites($userID);
+            $favCocktails = $this->cocktailService->showCocktails($CocktailID['fiveFavorites']);
+            return response()->json(['message' => "Get fav data successfully", "favCocktail" => $favCocktails['cocktails']]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

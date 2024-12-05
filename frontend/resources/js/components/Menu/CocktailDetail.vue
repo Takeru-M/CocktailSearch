@@ -110,7 +110,7 @@
                             }
                         }
                     );
-                    console.log(response.data);
+                    console.log(response.data.message);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                     console.error('Registering favorite cocktail failed:', e.response.data.message);

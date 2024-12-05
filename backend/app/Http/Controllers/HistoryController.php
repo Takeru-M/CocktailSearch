@@ -6,9 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\History;
 use App\Models\Cocktail;
+use App\Services\CocktailService;
+use App\Services\HistoryService;
 
 class HistoryController extends Controller
 {
+    protected $historyService;
+    protected $cocktailService;
+
+    public function __construct (HistoryService $historyService, CocktailService $cocktailService) {
+        $this->historyService = $historyService;
+        $this->cocktailService = $cocktailService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -34,11 +44,8 @@ class HistoryController extends Controller
         $cocktailID = $request->input('cocktailID');
 
         try {
-            $history = History::create([
-                'user_id' => $userID,
-                'cocktail_id' => $cocktailID,
-            ]);
-            return response()->json(['message' => 'History saved successfully'], 201);
+            $result = $this->historyService->createHistory($userID, $cocktailID);
+            return response()->json(['message' => $result['message']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'An error occurred'], 500);
@@ -80,9 +87,9 @@ class HistoryController extends Controller
     public function getFiveHistories (Request $request) {
         $userID = $request->input('userID');
         try {
-            $cocktailID = History::where('user_id', $userID)->orderBy('created_at', 'desc')->take(5)->pluck('cocktail_id');
-            $history = Cocktail::whereIn('cocktail_id', $cocktailID)->get();
-            return response()->json(['message' => "Get history successfully", "history" => $history], 200);
+            $CocktailID = $this->historyService->getFiveHistories($userID);
+            $histories= $this->cocktailService->showCocktails($CocktailID['fiveHistories']);
+            return response()->json(['message' => "Get history successfully", "history" => $histories['cocktails']], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

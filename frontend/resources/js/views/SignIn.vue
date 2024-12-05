@@ -92,7 +92,7 @@
                     router.push('/dashboard');
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
-                    console.error('Registering favorite cocktail failed:', e.response.data.message);
+                    console.error('Sign in failed:', e.response.data.message);
                     } else if (e instanceof Error) {
                         console.error('An error occurred:', e.message);
                     }

@@ -141,7 +141,7 @@ import { GetCocktailResponse } from '@/types/responses/GetCocktail';
 
             const setSelectedCocktail = async (cocktail_id: number): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetCocktailResponse>('http://127.0.0.1:8000/api/getCocktail', {
+                const response = await axios.post<GetCocktailResponse>('http://127.0.0.1:8000/api/cocktail', {
                         cocktailID: cocktail_id,
                     },
                     {

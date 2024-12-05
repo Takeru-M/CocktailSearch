@@ -70,10 +70,10 @@
                 password: '',
             });
             const onFinish = (values: any) => {
-                console.log('Success:', values);
+                // console.log('Success:', values);
             };
             const onFinishFailed = (errorInfo: any) => {
-                console.log('Failed:', errorInfo);
+                // console.log('Failed:', errorInfo);
             };
             const login = async (): Promise<void> => {
                 try {
@@ -89,7 +89,7 @@
                     router.push('/dashboard');
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
-                    console.error('Registering favorite cocktail failed:', e.response.data.message);
+                    console.error('Login failed:', e.response.data.message);
                     } else if (e instanceof Error) {
                         console.error('An error occurred:', e.message);
                     }

@@ -8,20 +8,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Services\UserService;
 
 class AuthController extends Controller
 {
+    protected $userService;
+
+    public function __construct (UserService $userService) {
+        $this->userService = $userService;
+    }
+
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -49,21 +47,14 @@ class AuthController extends Controller
 
     public function signin (Request $request) {
         {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:8',
-            ]);
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $user = $this->userService->createUser($name, $email, $password);
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+            $token = $user['result']->createToken('API Token')->plainTextToken;
 
-            $token = $user->createToken('API Token')->plainTextToken;
-
-            return response()->json(['message' => 'Signed in', 'token' => $token, 'user' => $user]);
+            return response()->json(['message' => $user['message'], 'token' => $token, 'user' => $user['result']]);
         }
     }
 }

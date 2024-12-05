@@ -6,9 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Cocktail;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Services\CocktailService;
 
 class CocktailController extends Controller
 {
+    protected $cocktailService;
+
+    public function __construct(CocktailService $cocktailService)
+    {
+        $this->cocktailService = $cocktailService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,35 +41,11 @@ class CocktailController extends Controller
         $cocktailData = $request->input('cocktailData');
 
         try {
-            $record = Cocktail::where('cocktail_id', $cocktailData['cocktail_id'])
-                                ->first();
-            if (!$record) {
-                $cocktail = Cocktail::create([
-                    'cocktail_id' => $cocktailData['cocktail_id'],
-                    'cocktail_name' => $cocktailData['cocktail_name'],
-                    'cocktail_name_english' => $cocktailData['cocktail_name_english'],
-                    'base_name' => $cocktailData['base_name'],
-                    'technique_name' => $cocktailData['technique_name'],
-                    'taste_name' => $cocktailData['taste_name'],
-                    'style_name' => $cocktailData['style_name'],
-                    'alcohol' => $cocktailData['alcohol'],
-                    'tpo_name' => $cocktailData['tpo_name'],
-                    'glass_name' => $cocktailData['glass_name'],
-                    'type_name' => $cocktailData['type_name'],
-                    'color_name' => $cocktailData['color_name'],
-                    'cocktail_digest' => $cocktailData['cocktail_digest'],
-                    'cocktail_desc' => $cocktailData['cocktail_desc'],
-                    'recipe_desc' => $cocktailData['recipe_desc'],
-                    'recipes' => json_encode($cocktailData['recipes']),
-                    'tags' => json_encode($cocktailData['tags']),
-                ]);
-                return response()->json(['message' => 'Cocktail saved successfully'], 201);
-            } else {
-                return response()->json(['message' => 'Cocktail has been already saved'], 201);
-            }
+            $result = $this->cocktailService->storeCocktail($cocktailData);
+            return response()->json(['message' => $result['message']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response(500);
+            return response()->json(['message' => 'An error occurred'], 500);
         }
     }
 
@@ -73,12 +57,8 @@ class CocktailController extends Controller
         $cocktailID = $request->input('cocktailID');
 
         try {
-            $cocktail = Cocktail::where('cocktail_id', $cocktailID)->first();
-            if (!$cocktail) {
-                return response()->json(['error' => 'Cocktail not found'], 404);
-            } else {
-                return response()->json(['message' => 'Get cocktail successfully', 'cocktail' => $cocktail]);
-            }
+            $result = $this->cocktailService->showCocktail($cocktailID);
+            return response()->json(['message' => $result['message'], 'cocktail' => $result['cocktail']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'An error occurred'], 500);
