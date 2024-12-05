@@ -2,6 +2,7 @@
     "header-logo": "CocktailSearch",
     "nav": {
         "nav1": "アカウント",
-        "nav2": "ログアウト"
+        "nav2": "ログアウト",
+        "nav3": "言語変更"
     }
 }

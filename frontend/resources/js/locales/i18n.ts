@@ -13,6 +13,6 @@ const messages = {
 
 export const vueI18n = createI18n({
     locale: 'en',
-    fallbackLocale: 'ja',
+    fallbackLocale: 'en',
     messages,
 })

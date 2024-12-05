@@ -3,17 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CocktailController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\HistoryController;
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('/dashboard', [ApiController::class, 'fetchDataOfCocktail']);
-    Route::post('/registerCocktail', [ApiController::class, 'registerCocktail']);
-    Route::post('/getCocktail', [ApiController::class, 'getCocktail']);
-    Route::post('/registerHistory', [ApiController::class, 'registerHistory']);
-    Route::post('/getHistory', [ApiController::class, 'getHistory']);
-    Route::post('/registerFav', [ApiController::class, 'registerFav']);
-    Route::post('/removeFav', [ApiController::class, 'removeFav']);
-    Route::post('/getFavCocktail', [ApiController::class, 'getFavCocktail']);
-    Route::post('/tmp', [ApiController::class, 'tmp']);
+    Route::get('/cocktail/fetch_data_of_cocktail', [CocktailController::class, 'fetchDataOfCocktail']);
+    Route::resource('cocktail', CocktailController::class);
+    Route::resource('favorite', FavoriteController::class);
+    Route::resource('history', HistoryController::class);
+    Route::post('/removeFav', [FavoriteController::class, 'removeFav']);
+    Route::post('/cocktail/get_five_fav_cocktails', [FavoriteController::class, 'getFiveFavCocktails']);
+    Route::post('/cocktail/get_five_histories', [HistoryController::class, 'getFiveHistories']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 

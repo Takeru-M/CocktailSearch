@@ -99,18 +99,18 @@
             //Register the favorite cocktail from the database
             const registerFav = async (user: User, token: string | null): Promise<void> => {
                 try {
-                    const responseFromRegisterFav = await axios.post<RegisterFavResponse>('http://127.0.0.1:8000/api/registerFav', {
-                        userID: user.id,
-                        cocktailID: selectedCocktail.value.cocktail_id,
+                    const response = await axios.post<RegisterFavResponse>('http://127.0.0.1:8000/api/favorite', {
+                            userID: user.id,
+                            cocktailID: selectedCocktail.value.cocktail_id,
                         },
                         {
                             headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
                             }
                         }
                     );
-                    console.log(responseFromRegisterFav.data.message);
+                    console.log(response.data);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                     console.error('Registering favorite cocktail failed:', e.response.data.message);
@@ -123,18 +123,18 @@
             //Remove the favorite cocktail from the database
             const removeFav = async (user: User, token: string | null): Promise<void> => {
                 try {
-                    const responseFromRemoveFav = await axios.post<RemoveFavResponse>('http://127.0.0.1:8000/api/removeFav', {
+                    const response = await axios.post<RemoveFavResponse>('http://127.0.0.1:8000/api/removeFav', {
                         userID: user.id,
                         cocktailID: selectedCocktail.value.cocktail_id,
-                        },
-                        {
-                            headers: {
+                    },
+                    {
+                        headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json',
-                            }
                         }
+                    }
                     );
-                    console.log(responseFromRemoveFav.data.message);
+                    console.log(response.data.message);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                         console.error('Removing favorite cocktail failed:', e.response.data.message);

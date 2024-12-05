@@ -115,7 +115,7 @@ export default createStore<State> ({
             };
             try {
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.get<Cocktails>('http://127.0.0.1:8000/api/dashboard', {
+                const response = await axios.get<Cocktails>('http://127.0.0.1:8000/api/cocktail/fetch_data_of_cocktail', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },

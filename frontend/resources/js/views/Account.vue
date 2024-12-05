@@ -108,13 +108,13 @@ import { GetCocktailResponse } from '@/types/responses/GetCocktail';
             //Get the histories of the user from the database
             const getHistory = async (): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetHistoryResponse>('http://127.0.0.1:8000/api/getHistory', {
-                    userID: user.value.id
+                const response = await axios.post<GetHistoryResponse>('http://127.0.0.1:8000/api/cocktail/get_five_histories', {
+                        userID: user.value.id
                     },
                     {
                         headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
                         }
                     }
                 );
@@ -125,7 +125,7 @@ import { GetCocktailResponse } from '@/types/responses/GetCocktail';
             //Get the favorie cocktails of the user from the database
             const getFavCocktail = async (): Promise<void> => {
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/getFavCocktail', {
+                const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/cocktail/get_five_fav_cocktails', {
                         userID: user.value.id
                     },
                     {

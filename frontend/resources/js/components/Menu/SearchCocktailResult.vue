@@ -68,14 +68,14 @@
             const registerHistory = async (result: Cocktail): Promise<void> => {
                 const user: User = computed(() => store.getters.user).value;
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<RegisterHistory>('http://127.0.0.1:8000/api/registerHistory', {
-                    userID: user.id,
-                    cocktailID: result.cocktail_id
+                const response = await axios.post<RegisterHistory>('http://127.0.0.1:8000/api/history', {
+                        userID: user.id,
+                        cocktailID: result.cocktail_id
                     },
                     {
                         headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
                         }
                     }
                 );

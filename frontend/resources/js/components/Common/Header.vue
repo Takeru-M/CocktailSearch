@@ -15,6 +15,24 @@
         <a-menu-item key="2">
             <RouterLink to="/login" @click="logout">{{ t('header.nav.nav2') }}</RouterLink>
         </a-menu-item>
+        <a-menu-item key="3">
+            <a-dropdown>
+                <a class="ant-dropdown-link" @click.prevent>
+                {{ t('header.nav.nav3') }}
+                <DownOutlined />
+                </a>
+                <template #overlay>
+                <a-menu>
+                    <a-menu-item>
+                        <button @click="changeLanguage('en')">En</button>
+                    </a-menu-item>
+                    <a-menu-item>
+                        <button @click="changeLanguage('ja')">Ja</button>
+                    </a-menu-item>
+                </a-menu>
+                </template>
+            </a-dropdown>
+        </a-menu-item>
     </a-menu>
     </a-layout-header>
 </template>
@@ -31,15 +49,21 @@
 
     export default defineComponent ({
     setup () {
-        const { t } = useI18n();
+        const { t, locale } = useI18n();
         const store = useStore<State>();
+
+        const changeLanguage = (language: string): void => {
+            locale.value = locale.value === 'en' ? 'ja' : 'en';
+            console.log('Language is changed');
+        };
 
         const logout = async (): Promise<void> => {
             try {
                 const token: string | null = localStorage.getItem('auth_token');
                 const response = await axios.post<LogoutResponse>("http://127.0.0.1:8000/api/logout",{}, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
                     },
                 });
                 localStorage.removeItem('auth_token');
@@ -59,6 +83,7 @@
         return {
             t,
             store,
+            changeLanguage,
             logout,
         };
     },
