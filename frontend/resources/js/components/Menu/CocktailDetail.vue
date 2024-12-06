@@ -89,6 +89,7 @@ import { registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
                 if (selectedCocktailJson) {
                     selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
                 }
+                store.dispatch('setGetCocktailFlag', false);
             })
 
             // const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);

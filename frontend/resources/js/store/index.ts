@@ -58,8 +58,8 @@ export default createStore<State> ({
         setTotalOfItems (state: State, totalOfItems: number): void {
             state.totalOfItems = totalOfItems;
         },
-        setGetCocktailFlag (state: State): void {
-            state.getCocktailFlag = true;
+        setGetCocktailFlag (state: State, flag: boolean): void {
+            state.getCocktailFlag = flag;
         },
         setCocktailID (state: State, id: number): void {
             state.selectedCocktailID = id;
@@ -96,8 +96,8 @@ export default createStore<State> ({
         setTotalOfItems (context: CommonActionContext, totalOfItems: number): void {
             context.commit('setTotalOfItems', totalOfItems);
         },
-        setGetCocktailFlag (context: CommonActionContext): void {
-            context.commit('setGetCocktailFlag');
+        setGetCocktailFlag (context: CommonActionContext, flag: boolean): void {
+            context.commit('setGetCocktailFlag', flag);
         },
         async fetchCocktailData (context: CommonActionContext, {word, base, taste, percentage, tag, page}: PreCocktailParams) {
             let alcohol_from: number | null = null;
@@ -134,21 +134,7 @@ export default createStore<State> ({
                 page: page
             }
             try {
-                const token: string | null = localStorage.getItem('auth_token');
-                // const response = await axios.get<Cocktails>('http://127.0.0.1:8000/api/cocktail/fetchCocktails', {
-                //     headers: {
-                //         'Authorization': `Bearer ${token}`,
-                //     },
-                //     params: {
-                //         word: word,
-                //         base: base,
-                //         taste: taste,
-                //         tag: tag,
-                //         alcohol_from: alcohol_from,
-                //         alcohol_to: alcohol_to,
-                //         page: page
-                //     }
-                // });
+                // const token: string | null = localStorage.getItem('auth_token');
                 const response = await fetchCocktailsAPI(cocktailParams);
                 return response;
             } catch (e: unknown) {

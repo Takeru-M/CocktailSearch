@@ -144,6 +144,7 @@ import { getCocktailAPI } from '@/utils/CocktialAPI';
                 console.log(response.message);
                 store.dispatch('setSelectedCocktail', response.cocktail);
                 localStorage.setItem('SelectedCocktail', JSON.stringify(response.cocktail));
+                store.dispatch('setGetCocktailFlag', true);
             }
 
             return {

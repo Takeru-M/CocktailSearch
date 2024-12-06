@@ -64,9 +64,9 @@ import { registerHistoryAPI } from '@/utils/HistoryAPI';
             const cocktailDetail = async (result: Cocktail): Promise<void> => {
                 await CommonUtils.registerCocktail(result);
                 await registerHistory(result);
-                await setSelectedCocktail(result);
+                setSelectedCocktail(result);
                 await router.push({ name: 'CocktailDetail', params: { id: result.cocktail_id } });
-                await store.dispatch('setGetCocktailFlag');
+                store.dispatch('setGetCocktailFlag', true);
             };
 
             //Register the data of the cocktail and user to the database
@@ -81,12 +81,9 @@ import { registerHistoryAPI } from '@/utils/HistoryAPI';
             };
 
             //Set the data of selected cocktail to store
-            const setSelectedCocktail = async (result: Cocktail): Promise<void> => {
-                return new Promise((resolve) => {
-                    store.dispatch("setSelectedCocktail", result);
-                    localStorage.setItem('SelectedCocktail', JSON.stringify(result));
-                    resolve();
-                });
+            const setSelectedCocktail = (result: Cocktail) => {
+                store.dispatch("setSelectedCocktail", result);
+                localStorage.setItem('SelectedCocktail', JSON.stringify(result));
             };
 
             return {
