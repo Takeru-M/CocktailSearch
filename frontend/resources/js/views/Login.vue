@@ -50,12 +50,10 @@
     import { ref, reactive, defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
-    import axios from 'axios';
     import { AxiosError } from 'axios';
     import router from '../router';
     import { RouterLink } from 'vue-router';
     import { State } from '@/types/stores/CommonStore';
-    import { Login } from '@/types/responses/LoginResponse';
     import { FormInstance } from 'ant-design-vue';
     import { loginAPI } from '@/utils/AuthAPI';
 

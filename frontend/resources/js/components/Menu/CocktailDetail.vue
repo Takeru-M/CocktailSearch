@@ -63,13 +63,11 @@
     import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useRoute } from 'vue-router';
-    import axios from 'axios';
     import { AxiosError } from 'axios';
     import { HeartFilled } from '@ant-design/icons-vue';
     import { State } from '@/types/stores/CommonStore';
-    import { User, Cocktail } from '@/types/stores/CommonStore';
-    import { RegisterFavResponse, RemoveFavResponse } from '@/types/responses/CocktailDetailResponse';
-import { registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
+    import { Cocktail } from '@/types/stores/CommonStore';
+    import { registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
 
     export default defineComponent ({
         components: {

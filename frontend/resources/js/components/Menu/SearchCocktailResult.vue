@@ -46,11 +46,9 @@
     import { RouterLink } from 'vue-router';
     import { useRouter } from 'vue-router';
     import { useStore } from 'vuex';
-    import axios from 'axios';
     import CommonUtils from '@/utils/Common';
-    import { State, User, Cocktail, Cocktails } from '@/types/stores/CommonStore';
-    import { RegisterHistory } from '@/types/responses/SearchCocktailResultResponse';
-import { registerHistoryAPI } from '@/utils/HistoryAPI';
+    import { State, Cocktail, Cocktails } from '@/types/stores/CommonStore';
+    import { registerHistoryAPI } from '@/utils/HistoryAPI';
 
     export default defineComponent ({
         setup() {

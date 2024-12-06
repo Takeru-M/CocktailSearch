@@ -55,9 +55,8 @@
     import { AxiosError } from 'axios';
     import router from '../router';
     import { State } from '@/types/stores/CommonStore';
-    import { Signin } from '@/types/responses/SigninResponse';
     import { FormInstance } from 'ant-design-vue';
-import { signinAPI } from '@/utils/AuthAPI';
+    import { signinAPI } from '@/utils/AuthAPI';
 
     interface FormState {
         username: string;

@@ -64,14 +64,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated: string | null  = localStorage.getItem('login_status');
+    if (isAuthenticated && to.path === '/login') {
+        next({ path: '/dashboard' });
+        return;
+    }
     if (to.matched.some(record => record.meta.requireAuth)) {
         if (!isAuthenticated) {
             next({ path: '/login' });
         } else {
             next();
         }
-    }
-    else {
+    } else {
         next();
     }
 });

@@ -84,15 +84,12 @@
     import { defineComponent, computed, ref, onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
-    import axios from 'axios';
     import { State, User } from '@/types/stores/CommonStore';
-    import { GetFavCocktail, GetHistoryResponse, GetUser } from '@/types/responses/AccountResponse';
     import { CocktailResponse } from '@/types/responses/CommonResponse';
-    import { GetCocktailResponse } from '@/types/responses/GetCocktailResponse';
-import { getFiveHistoriesAPI } from '@/utils/HistoryAPI';
-import { getFiveFavCocktailsAPI } from '@/utils/FavoriteAPI';
-import { getUserAPI } from '@/utils/UserAPI';
-import { getCocktailAPI } from '@/utils/CocktialAPI';
+    import { getFiveHistoriesAPI } from '@/utils/HistoryAPI';
+    import { getFiveFavCocktailsAPI } from '@/utils/FavoriteAPI';
+    import { getUserAPI } from '@/utils/UserAPI';
+    import { getCocktailAPI } from '@/utils/CocktialAPI';
 
     export default defineComponent ({
         setup() {

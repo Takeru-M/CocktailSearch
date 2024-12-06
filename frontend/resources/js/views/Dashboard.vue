@@ -20,44 +20,44 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed, watch } from 'vue';
-import { useStore } from 'vuex';
-import SearchCocktail from '../components/Menu/SearchCocktail.vue';
-import SearchCocktailResult from '../components/Menu/SearchCocktailResult.vue';
-import { State } from '@/types/stores/CommonStore';
-import { Cocktails } from '@/types/stores/CommonStore';
+    import { ref, defineComponent, computed, watch } from 'vue';
+    import { useStore } from 'vuex';
+    import SearchCocktail from '../components/Menu/SearchCocktail.vue';
+    import SearchCocktailResult from '../components/Menu/SearchCocktailResult.vue';
+    import { State } from '@/types/stores/CommonStore';
+    import { Cocktails } from '@/types/stores/CommonStore';
 
-export default defineComponent ({
-    components: {
-        SearchCocktail,
-        SearchCocktailResult
-    },
-    setup () {
-        const store = useStore<State>();
+    export default defineComponent ({
+        components: {
+            SearchCocktail,
+            SearchCocktailResult
+        },
+        setup () {
+            const store = useStore<State>();
 
-        const currentPageForBind = computed<number>(() => store.getters.currentPage);
-        const currentPage = ref<number>(currentPageForBind.value);
-        const totalOfItems = computed<number>(() => store.getters.totalOfItems);
-        const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
-        const searchStatus = computed<boolean>(() => store.getters.searchStatus);
+            const currentPageForBind = computed<number>(() => store.getters.currentPage);
+            const currentPage = ref<number>(currentPageForBind.value);
+            const totalOfItems = computed<number>(() => store.getters.totalOfItems);
+            const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
+            const searchStatus = computed<boolean>(() => store.getters.searchStatus);
 
-        watch(currentPageForBind, (newValue: number, oldValue: number) => {
-            currentPage.value = currentPageForBind.value;
-        });
+            watch(currentPageForBind, (newValue: number, oldValue: number) => {
+                currentPage.value = currentPageForBind.value;
+            });
 
-        watch(currentPage, (newValue, oldValue) => {
-            store.dispatch('setCurrentPage', currentPage.value);
-        });
+            watch(currentPage, (newValue, oldValue) => {
+                store.dispatch('setCurrentPage', currentPage.value);
+            });
 
-        return {
-            currentPageForBind,
-            currentPage,
-            cocktailData,
-            totalOfItems,
-            searchStatus,
-        };
-    },
-});
+            return {
+                currentPageForBind,
+                currentPage,
+                cocktailData,
+                totalOfItems,
+                searchStatus,
+            };
+        },
+    });
 </script>
 
 <style>

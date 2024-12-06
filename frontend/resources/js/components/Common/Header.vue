@@ -23,12 +23,8 @@
                 </a>
                 <template #overlay>
                 <a-menu>
-                    <a-menu-item>
-                        <button @click="changeLanguage('en')">En</button>
-                    </a-menu-item>
-                    <a-menu-item>
-                        <button @click="changeLanguage('ja')">Ja</button>
-                    </a-menu-item>
+                    <a-menu-item @click="changeLanguage('en')">En</a-menu-item>
+                    <a-menu-item @click="changeLanguage('ja')">Ja</a-menu-item>
                 </a-menu>
                 </template>
             </a-dropdown>
@@ -42,11 +38,9 @@
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import router from '@/router';
-    import axios from 'axios';
     import { AxiosError } from 'axios';
     import { State } from '@/types/stores/CommonStore';
-    import { LogoutResponse } from '@/types/responses/HeaderResponse';
-import { logoutAPI } from '@/utils/AuthAPI';
+    import { logoutAPI } from '@/utils/AuthAPI';
 
     export default defineComponent ({
     setup () {
@@ -54,7 +48,7 @@ import { logoutAPI } from '@/utils/AuthAPI';
         const store = useStore<State>();
 
         const changeLanguage = (language: string): void => {
-            locale.value = locale.value === 'en' ? 'ja' : 'en';
+            locale.value = language;
             console.log('Language is changed');
         };
 
