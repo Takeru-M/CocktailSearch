@@ -3,12 +3,7 @@ import { Recipe, Tag } from "../stores/CommonStore";
 export interface UserResponse {
     id: number;
     name: string;
-    emal: string;
-    email_verified_at: null;
-    password: string;
-    remember_token: null;
-    created_at: string;
-    updated_at: string;
+    email: string;
 }
 
 export interface CocktailResponse {

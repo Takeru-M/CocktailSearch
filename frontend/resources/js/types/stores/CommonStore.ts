@@ -8,6 +8,7 @@ export interface State {
     currentPage: number;
     totalOfItems: number;
     selectedCocktailID: number;
+    getCocktailFlag: boolean;
     cocktailData: Cocktails | null;
     selectedCocktail: Cocktail | null;
     searchStatus: boolean;
@@ -17,8 +18,6 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    email_verified: null;
-    password: string;
 }
 
 export interface Cocktails {
@@ -60,11 +59,21 @@ export interface Tag {
     tag_name: string;
 }
 
-export interface FetchCocktailParams {
+export interface PreCocktailParams {
     word: string | null;
     base: string | null;
     taste: string | null;
     percentage: string | null;
     tag: string | null;
+    page: number | null;
+}
+
+export interface CocktailParams {
+    word: string | null;
+    base: string | null;
+    taste: string | null;
+    tag: string | null;
+    alcohol_from: number | null,
+    alcohol_to: number | null,
     page: number | null;
 }

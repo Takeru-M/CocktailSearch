@@ -46,6 +46,7 @@
     import { AxiosError } from 'axios';
     import { State } from '@/types/stores/CommonStore';
     import { LogoutResponse } from '@/types/responses/HeaderResponse';
+import { logoutAPI } from '@/utils/AuthAPI';
 
     export default defineComponent ({
     setup () {
@@ -59,17 +60,12 @@
 
         const logout = async (): Promise<void> => {
             try {
-                const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<LogoutResponse>("http://127.0.0.1:8000/api/logout",{}, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
+                // const token: string | null = localStorage.getItem('auth_token');
+                const response = await logoutAPI();
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('login_status');
                 store.dispatch('setLogoutStatus');
-                console.log('Logout successful:', response.data.message);
+                console.log('Logout successful:', response.message);
                 router.push('/login');
             } catch (e) {
                 if (e instanceof AxiosError && e.response) {

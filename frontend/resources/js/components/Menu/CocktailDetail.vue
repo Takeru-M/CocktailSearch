@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-    import { computed, ref } from 'vue';
+    import { computed, ref, onMounted, nextTick, watch } from 'vue';
     import { defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import { useRoute } from 'vue-router';
@@ -69,6 +69,7 @@
     import { State } from '@/types/stores/CommonStore';
     import { User, Cocktail } from '@/types/stores/CommonStore';
     import { RegisterFavResponse, RemoveFavResponse } from '@/types/responses/CocktailDetailResponse';
+import { registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
 
     export default defineComponent ({
         components: {
@@ -78,39 +79,54 @@
             const store = useStore<State>();
             const route = useRoute();
 
-            const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);
+            onMounted(async () => {
+                setSelectedCocktail();
+            });
+
+            const getCocktailFlag = computed(() => store.getters.getCocktailFlag);
+            watch(getCocktailFlag, (newValue, oldValue) => {
+                const selectedCocktailJson = localStorage.getItem('SelectedCocktail');
+                if (selectedCocktailJson) {
+                    selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
+                }
+            })
+
+            // const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);
+            let selectedCocktail = ref<Cocktail | null>(null)
+            const selectedCocktailJson = localStorage.getItem('SelectedCocktail');
+            const setSelectedCocktail = (): void => {
+                if (selectedCocktailJson) {
+                    selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
+                }
+            }
+            // const selectedCocktail = localStorage.getItem('SelectedCocktail') != null ?  JSON.parse(localStorage.getItem('SelectedCocktail')) as Cocktail : null;
             let favFlag: boolean = false;
             const favBtnColor = ref<string>('gray');
 
             //Register and remove the favorite cocktial if the button is pushed
             const favBtn = (): void => {
-                const user = computed<User>(() => store.getters.user).value;
+                const userID: number = Number(localStorage.getItem('user_id'));
                 favBtnColor.value = favBtnColor.value === 'gray' ? 'red' : 'gray';
-                const token: string | null = localStorage.getItem('auth_token');
+                // const token: string | null = localStorage.getItem('auth_token');
                 if (!favFlag) {
-                    registerFav(user, token);
+                    registerFav(userID);
                     favFlag = true;
                 } else {
-                    removeFav(user, token);
+                    removeFav(userID);
                     favFlag = false;
                 }
             };
 
             //Register the favorite cocktail from the database
-            const registerFav = async (user: User, token: string | null): Promise<void> => {
+            const registerFav = async (userID: number): Promise<void> => {
                 try {
-                    const response = await axios.post<RegisterFavResponse>('http://127.0.0.1:8000/api/favorite', {
-                            userID: user.id,
-                            cocktailID: selectedCocktail.value.cocktail_id,
-                        },
-                        {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        }
-                    );
-                    console.log(response.data.message);
+                    if (selectedCocktail.value) {
+                        const response = await registerFavAPI({
+                            userID: userID,
+                            cocktailID: selectedCocktail.value.cocktail_id
+                        });
+                        console.log(response.message);
+                    }
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                     console.error('Registering favorite cocktail failed:', e.response.data.message);
@@ -121,20 +137,15 @@
             };
 
             //Remove the favorite cocktail from the database
-            const removeFav = async (user: User, token: string | null): Promise<void> => {
+            const removeFav = async (userID: number): Promise<void> => {
                 try {
-                    const response = await axios.post<RemoveFavResponse>('http://127.0.0.1:8000/api/removeFav', {
-                        userID: user.id,
-                        cocktailID: selectedCocktail.value.cocktail_id,
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
+                    if (selectedCocktail.value) {
+                        const response = await removeFavAPI({
+                            userID: userID,
+                            cocktailID: selectedCocktail.value.cocktail_id
+                        });
+                        console.log(response.message);
                     }
-                    );
-                    console.log(response.data.message);
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
                         console.error('Removing favorite cocktail failed:', e.response.data.message);
@@ -148,6 +159,7 @@
                 store,
                 route,
                 favFlag,
+                setSelectedCocktail,
                 selectedCocktail,
                 favBtnColor,
                 favBtn,

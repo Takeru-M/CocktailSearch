@@ -2,10 +2,10 @@
     <div class="account">
         <div class="account-wrapper">
             <div class="account-info">
-                <div class="account-name">
+                <div class="account-name" v-if="user">
                     <h1>{{ user.name }}</h1>
                 </div>
-                <div class="account-mail">
+                <div class="account-mail" v-if="user">
                     <h3>{{ user.email }}</h3>
                 </div>
                 <div class="account-menu">
@@ -85,81 +85,72 @@
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import axios from 'axios';
-    import { State } from '@/types/stores/CommonStore';
-    import { User } from '@/types/stores/CommonStore';
-    import { GetFavCocktail, GetHistoryResponse } from '@/types/responses/AccountResponse';
+    import { State, User } from '@/types/stores/CommonStore';
+    import { GetFavCocktail, GetHistoryResponse, GetUser } from '@/types/responses/AccountResponse';
     import { CocktailResponse } from '@/types/responses/CommonResponse';
-import { GetCocktailResponse } from '@/types/responses/GetCocktail';
+    import { GetCocktailResponse } from '@/types/responses/GetCocktailResponse';
+import { getFiveHistoriesAPI } from '@/utils/HistoryAPI';
+import { getFiveFavCocktailsAPI } from '@/utils/FavoriteAPI';
+import { getUserAPI } from '@/utils/UserAPI';
+import { getCocktailAPI } from '@/utils/CocktialAPI';
 
     export default defineComponent ({
         setup() {
             const { t } = useI18n();
             const store = useStore<State>();
+            const user = ref<User | null>(null);
             let histories = ref<CocktailResponse[] | null>([]);
             let favCocktails = ref<CocktailResponse[] | null>([]);
 
-            const user = computed<User>(() => store.getters.user);
+            const userID: number = Number(localStorage.getItem('user_id'));
 
             onMounted(() => {
+                getUser();
                 getHistory();
                 getFavCocktail();
             });
 
+            const getUser = async (): Promise<void> => {
+                // const token: string | null = localStorage.getItem('auth_token');
+                const response = await getUserAPI(userID);
+                user.value = response.user;
+                console.log(response.message);
+            }
+
             //Get the histories of the user from the database
             const getHistory = async (): Promise<void> => {
-                const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetHistoryResponse>('http://127.0.0.1:8000/api/cocktail/get_five_histories', {
-                        userID: user.value.id
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    }
-                );
-                histories.value = response.data.history;
-                console.log(response.data.message);
+                // const token: string | null = localStorage.getItem('auth_token');
+                const response = await getFiveHistoriesAPI({
+                    userID: userID
+                });
+                histories.value = response.history;
+                console.log(response.message);
             };
 
             //Get the favorie cocktails of the user from the database
             const getFavCocktail = async (): Promise<void> => {
-                const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetFavCocktail>('http://127.0.0.1:8000/api/cocktail/get_five_fav_cocktails', {
-                        userID: user.value.id
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
-                favCocktails.value = response.data.favCocktail;
-                console.log(response.data.message);
+                // const token: string | null = localStorage.getItem('auth_token');
+                const response = await getFiveFavCocktailsAPI({
+                    userID: userID
+                });
+                favCocktails.value = response.favCocktail;
+                console.log(response.message);
             };
 
             const setSelectedCocktail = async (cocktail_id: number): Promise<void> => {
-                const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.post<GetCocktailResponse>('http://127.0.0.1:8000/api/cocktail', {
-                        cocktailID: cocktail_id,
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
-                console.log(response.data.message);
-                store.dispatch('setSelectedCocktail', response.data.cocktail);
-                console.log(store.state.selectedCocktail);
+                // const token: string | null = localStorage.getItem('auth_token');
+                const response = await getCocktailAPI(cocktail_id);
+
+                console.log(response.message);
+                store.dispatch('setSelectedCocktail', response.cocktail);
+                localStorage.setItem('SelectedCocktail', JSON.stringify(response.cocktail));
             }
 
             return {
                 t,
                 store,
                 user,
+                userID,
                 histories,
                 favCocktails,
                 getHistory,

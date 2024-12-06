@@ -95,7 +95,7 @@
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
     import { Cocktail, State } from '@/types/stores/CommonStore';
-    import { PreviousAttributes } from '@/types/responses/SearchCocktail';
+    import { PreviousAttributes } from '@/types/responses/SearchCocktailResponse';
 
     export default defineComponent ({
         setup() {

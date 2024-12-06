@@ -15,4 +15,9 @@ class UserService {
         $result = $this->userRepository->createUser($name, $email, $password);
         return ['message' => 'Signed in', 'result' => $result, 'status' => 201];
     }
+
+    public function getUser ($userID) {
+        $result = $this->userRepository->getUser($userID);
+        return ['message' => 'Get user successfully', 'result' => $result, 'status' => 200];
+    }
 }

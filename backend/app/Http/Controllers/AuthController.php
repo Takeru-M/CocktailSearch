@@ -49,7 +49,7 @@ class AuthController extends Controller
         {
             $name = $request->input('name');
             $email = $request->input('email');
-            $password = $request->input('password');
+            $password = Hash::make($request->input('password'));
             $user = $this->userService->createUser($name, $email, $password);
 
             $token = $user['result']->createToken('API Token')->plainTextToken;

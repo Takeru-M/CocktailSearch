@@ -52,12 +52,10 @@ class CocktailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(string $id)
     {
-        $cocktailID = $request->input('cocktailID');
-
         try {
-            $result = $this->cocktailService->showCocktail($cocktailID);
+            $result = $this->cocktailService->showCocktail($id);
             return response()->json(['message' => $result['message'], 'cocktail' => $result['cocktail']], $result['status']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -89,7 +87,7 @@ class CocktailController extends Controller
         //
     }
 
-    public function fetchDataOfCocktail(Request $request){
+    public function fetchCocktails(Request $request){
         $word = $request->query('word');
         $base = $request->query('base');
         $taste = $request->query('taste');

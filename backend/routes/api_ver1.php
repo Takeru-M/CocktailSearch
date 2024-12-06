@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CocktailController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HistoryController;
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('/cocktail/fetch_data_of_cocktail', [CocktailController::class, 'fetchDataOfCocktail']);
+    Route::get('/cocktail/fetchCocktails', [CocktailController::class, 'fetchCocktails']);
+    Route::resource('user', UserController::class);
     Route::resource('cocktail', CocktailController::class);
     Route::resource('favorite', FavoriteController::class);
     Route::resource('history', HistoryController::class);

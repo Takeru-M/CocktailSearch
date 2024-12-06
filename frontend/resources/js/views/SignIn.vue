@@ -10,6 +10,7 @@
                     autocomplete="off"
                     @finish="onFinish"
                     @finishFailed="onFinishFailed"
+                    @submit.prevent="submitForm"
                 >
                 <a-form-item
                     class="name-form"
@@ -24,7 +25,7 @@
                     class="mail-form"
                     label="email"
                     name="email"
-                    :rules="[{ required: true, message: 'Please input your email!' }]"
+                    :rules="[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'The input is not valid email!' }]"
                 >
                     <a-input v-model:value="formState.email" />
                 </a-form-item>
@@ -33,7 +34,7 @@
                     class="pass-form"
                     label="Password"
                     name="password"
-                    :rules="[{ required: true, message: 'Please input your password!' }]"
+                    :rules="[{ required: true, message: 'Please input your password!' }, { min: 8, message: 'Password must be at least 8 characters!' }]"
                 >
                     <a-input-password v-model:value="formState.password" />
                 </a-form-item>
@@ -48,13 +49,15 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, reactive, computed } from 'vue';
+    import { defineComponent, reactive, ref } from 'vue';
     import { useStore } from 'vuex';
     import axios from 'axios';
     import { AxiosError } from 'axios';
     import router from '../router';
     import { State } from '@/types/stores/CommonStore';
     import { Signin } from '@/types/responses/SigninResponse';
+    import { FormInstance } from 'ant-design-vue';
+import { signinAPI } from '@/utils/AuthAPI';
 
     interface FormState {
         username: string;
@@ -79,16 +82,17 @@
 
             const signin = async(): Promise<void> => {
                 try {
-                    const response = await axios.post<Signin>('http://127.0.0.1:8000/api/signin', {
+                    const response = await signinAPI({
                         name: formState.username,
                         email: formState.email,
                         password: formState.password
                     });
                     store.dispatch('setLoginStatus');
-                    store.dispatch('setUser', response.data.user);
-                    localStorage.setItem('auth_token', response.data.token);
+                    store.dispatch('setUser', response.user);
+                    localStorage.setItem('auth_token', response.token);
+                    localStorage.setItem('user_id', JSON.stringify(store.getters.user.id));
                     localStorage.setItem('login_status', JSON.stringify(store.getters.loginStatus));
-                    console.log('Signin successful:', response.data.message);
+                    console.log('Signin successful:', response.message);
                     router.push('/dashboard');
                 } catch (e) {
                     if (e instanceof AxiosError && e.response) {
@@ -99,12 +103,24 @@
                 }
             };
 
+            const form = ref<FormInstance | null>(null);
+
+            const submitForm = async () => {
+                try {
+                    await form.value?.validate();
+                } catch (error) {
+                    console.log('Validation failed:', error);
+                }
+            };
+
             return{
                 axios,
                 formState,
                 onFinish,
                 onFinishFailed,
                 signin,
+                form,
+                submitForm,
             };
         },
     });

@@ -1,7 +1,8 @@
 import { createStore } from "vuex";
 import axios from 'axios';
-import { State } from '@/types/stores/CommonStore';
-import { CommonActionContext, User, Cocktail, Cocktails, FetchCocktailParams } from '@/types/stores/CommonStore';
+import { CocktailParams, State } from '@/types/stores/CommonStore';
+import { CommonActionContext, User, Cocktail, Cocktails, PreCocktailParams } from '@/types/stores/CommonStore';
+import { fetchCocktailsAPI } from "@/utils/CocktialAPI";
 
 export default createStore<State> ({
     state: {
@@ -10,6 +11,7 @@ export default createStore<State> ({
         currentPage: 1,
         totalOfItems: 0,
         selectedCocktailID: 0,
+        getCocktailFlag: false,
         cocktailData: null,
         selectedCocktail: null,
         searchStatus: false,
@@ -26,6 +28,9 @@ export default createStore<State> ({
         },
         totalOfItems (state: State): number {
             return state.totalOfItems;
+        },
+        getCocktailFlag (state: State): boolean {
+            return state.getCocktailFlag;
         },
         cocktailData (state: State): Cocktails | null {
             return state.cocktailData;
@@ -52,6 +57,9 @@ export default createStore<State> ({
         },
         setTotalOfItems (state: State, totalOfItems: number): void {
             state.totalOfItems = totalOfItems;
+        },
+        setGetCocktailFlag (state: State): void {
+            state.getCocktailFlag = true;
         },
         setCocktailID (state: State, id: number): void {
             state.selectedCocktailID = id;
@@ -88,7 +96,10 @@ export default createStore<State> ({
         setTotalOfItems (context: CommonActionContext, totalOfItems: number): void {
             context.commit('setTotalOfItems', totalOfItems);
         },
-        async fetchCocktailData (context: CommonActionContext, {word, base, taste, percentage, tag, page}: FetchCocktailParams) {
+        setGetCocktailFlag (context: CommonActionContext): void {
+            context.commit('setGetCocktailFlag');
+        },
+        async fetchCocktailData (context: CommonActionContext, {word, base, taste, percentage, tag, page}: PreCocktailParams) {
             let alcohol_from: number | null = null;
             let alcohol_to: number | null = null;
             switch (percentage) {
@@ -113,23 +124,33 @@ export default createStore<State> ({
                     alcohol_to = 100;
                     break;
             };
+            const cocktailParams: CocktailParams = {
+                word: word,
+                base: base,
+                taste: taste,
+                tag: tag,
+                alcohol_from: alcohol_from,
+                alcohol_to: alcohol_to,
+                page: page
+            }
             try {
                 const token: string | null = localStorage.getItem('auth_token');
-                const response = await axios.get<Cocktails>('http://127.0.0.1:8000/api/cocktail/fetch_data_of_cocktail', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    params: {
-                        word: word,
-                        base: base,
-                        taste: taste,
-                        tag: tag,
-                        alcohol_from: alcohol_from,
-                        alcohol_to: alcohol_to,
-                        page: page
-                    }
-                });
-                return response.data;
+                // const response = await axios.get<Cocktails>('http://127.0.0.1:8000/api/cocktail/fetchCocktails', {
+                //     headers: {
+                //         'Authorization': `Bearer ${token}`,
+                //     },
+                //     params: {
+                //         word: word,
+                //         base: base,
+                //         taste: taste,
+                //         tag: tag,
+                //         alcohol_from: alcohol_from,
+                //         alcohol_to: alcohol_to,
+                //         page: page
+                //     }
+                // });
+                const response = await fetchCocktailsAPI(cocktailParams);
+                return response;
             } catch (e: unknown) {
                 if (e instanceof Error) {
                     console.error(e.message);

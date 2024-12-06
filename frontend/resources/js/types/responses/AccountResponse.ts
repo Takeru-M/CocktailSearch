@@ -1,4 +1,4 @@
-import { CocktailResponse } from "./CommonResponse";
+import { CocktailResponse, UserResponse } from "./CommonResponse";
 
 export interface GetHistoryResponse {
     message: string;
@@ -8,4 +8,9 @@ export interface GetHistoryResponse {
 export interface GetFavCocktail {
     message: string;
     favCocktail: CocktailResponse[] | null;
+}
+
+export interface GetUser {
+    message: string;
+    user: UserResponse;
 }
