@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SigninRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,7 @@ class AuthController extends Controller
         $this->userService = $userService;
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
 
@@ -45,7 +47,7 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    public function signin (Request $request) {
+    public function signin (SigninRequest $request) {
         {
             $name = $request->input('name');
             $email = $request->input('email');

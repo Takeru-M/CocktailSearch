@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CocktailRequest;
 use Illuminate\Http\Request;
 use App\Models\Cocktail;
 use Illuminate\Support\Facades\Http;
@@ -87,7 +88,7 @@ class CocktailController extends Controller
         //
     }
 
-    public function fetchCocktails(Request $request){
+    public function fetchCocktails(CocktailRequest $request){
         $word = $request->query('word');
         $base = $request->query('base');
         $taste = $request->query('taste');
