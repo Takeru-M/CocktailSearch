@@ -49,3 +49,11 @@ export interface CocktailResponse {
     created_at: string;
     updated_at: string;
 }
+
+export interface FavoriteResponse {
+    id: number;
+    user_id: number;
+    cocktail_id: number;
+    created_at: string;
+    updated_at: string;
+}

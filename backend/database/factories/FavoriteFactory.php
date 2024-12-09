@@ -12,13 +12,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class FavoriteFactory extends Factory
 {
+    protected $model = Favorite::class;
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = Favorite::class;
-
     public function definition(): array
     {
         return [

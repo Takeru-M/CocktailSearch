@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::resource('cocktail', CocktailController::class);
     Route::resource('favorite', FavoriteController::class);
     Route::resource('history', HistoryController::class);
+    Route::get('/favorite/{userID}/{cocktailID}', [FavoriteController::class, 'isFav']);
     Route::post('/removeFav', [FavoriteController::class, 'removeFav']);
     Route::post('/cocktail/get_five_fav_cocktails', [FavoriteController::class, 'getFiveFavCocktails']);
     Route::post('/cocktail/get_five_histories', [HistoryController::class, 'getFiveHistories']);

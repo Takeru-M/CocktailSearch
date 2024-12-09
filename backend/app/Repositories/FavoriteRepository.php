@@ -13,6 +13,10 @@ class FavoriteRepository {
         return Favorite::where('user_id', $userID)->where('cocktail_id', $cocktailID)->first()->delete();
     }
 
+    public function isFavorite ($userID, $cocktailID) {
+        return Favorite::where('user_id', $userID)->where('cocktail_id', $cocktailID)->first();
+    }
+
     public function getFiveFavorites ($userID) {
         return Favorite::where('user_id', $userID)->orderBy('created_at', 'asc')->take(5)->pluck('cocktail_id');
     }

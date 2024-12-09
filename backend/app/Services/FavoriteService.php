@@ -21,6 +21,15 @@ class FavoriteService {
         return ['message' => 'Favorite removed successfully',  'status' => 200];
     }
 
+    public function isFavorite ($userID, $cocktailID) {
+        $result = $this->favoriteRepository->isFavorite($userID, $cocktailID);
+        if ($result) {
+            return ['message' => 'This cocktail is registerd as favorite one',  'status' => 200, 'isFav' => true];
+        } else {
+            return ['message' => 'This cocktail isn\'t registerd as favorite one',  'status' => 200, 'isFav' => false];
+        }
+    }
+
     public function getFiveFavorites ($userID) {
         $result = $this->favoriteRepository->getFiveFavorites($userID);
         return ['fiveFavorites' => $result];

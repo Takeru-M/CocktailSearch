@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\Favorite;
-use App\Models\Cocktail;
 use App\Services\CocktailService;
 use App\Services\FavoriteService;
 
@@ -81,6 +79,15 @@ class FavoriteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function isFav ($userID, $cocktailID) {
+        try {
+            $result = $this->favoriteService->isFavorite($userID, $cocktailID);
+            return response()->json(['message' => $result['message'], 'isFav' => $result['isFav']], $result['status']);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function removeFav (Request $request) {

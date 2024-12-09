@@ -16,7 +16,7 @@
                     class="name-form"
                     label="Username"
                     name="username"
-                    :rules="[{ required: true, message: 'Please input your username!' }]"
+                    :rules="nameRules"
                 >
                     <a-input v-model:value="formState.username" />
                 </a-form-item>
@@ -25,7 +25,7 @@
                     class="mail-form"
                     label="email"
                     name="email"
-                    :rules="[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'The input is not valid email!' }]"
+                    :rules="emailRules"
                 >
                     <a-input v-model:value="formState.email" />
                 </a-form-item>
@@ -34,7 +34,7 @@
                     class="pass-form"
                     label="Password"
                     name="password"
-                    :rules="[{ required: true, message: 'Please input your password!' }, { min: 8, message: 'Password must be at least 8 characters!' }]"
+                    :rules="passRules"
                 >
                     <a-input-password v-model:value="formState.password" />
                 </a-form-item>
@@ -57,6 +57,7 @@
     import { State } from '@/types/stores/CommonStore';
     import { FormInstance } from 'ant-design-vue';
     import { signinAPI } from '@/utils/AuthAPI';
+    import { nameRules, emailRules, passRules } from '@/Validation/Rules';
 
     interface FormState {
         username: string;
@@ -120,6 +121,9 @@
                 signin,
                 form,
                 submitForm,
+                nameRules,
+                emailRules,
+                passRules,
             };
         },
     });

@@ -1,5 +1,5 @@
 import apiClient from "./CommonAPI";
-import { RegisterFavResponse, RemoveFavResponse } from "@/types/responses/CocktailDetailResponse";
+import { GetFavResponse, RegisterFavResponse, RemoveFavResponse } from "@/types/responses/CocktailDetailResponse";
 import { GetFavCocktail } from "@/types/responses/AccountResponse";
 
 export const registerFavAPI = async (data: {userID: number, cocktailID: number}): Promise<RegisterFavResponse> => {
@@ -9,6 +9,11 @@ export const registerFavAPI = async (data: {userID: number, cocktailID: number})
 
 export const removeFavAPI = async (data: {userID: number, cocktailID: number}): Promise<RemoveFavResponse> => {
     const response = await apiClient.post('/removeFav', data);
+    return response.data;
+}
+
+export const getFavAPI = async (userID: number, cocktailID: number): Promise<GetFavResponse> => {
+    const response = await apiClient.get(`/favorite/${userID}/${cocktailID}`);
     return response.data;
 }
 

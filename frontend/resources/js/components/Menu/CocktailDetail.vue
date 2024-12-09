@@ -67,7 +67,7 @@
     import { HeartFilled } from '@ant-design/icons-vue';
     import { State } from '@/types/stores/CommonStore';
     import { Cocktail } from '@/types/stores/CommonStore';
-    import { registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
+    import { getFavAPI, registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
 
     export default defineComponent ({
         components: {
@@ -78,7 +78,8 @@
             const route = useRoute();
 
             onMounted(async () => {
-                setSelectedCocktail();
+                await setSelectedCocktail();
+                await judgeFavCocktail();
             });
 
             const getCocktailFlag = computed(() => store.getters.getCocktailFlag);
@@ -93,14 +94,26 @@
             // const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);
             let selectedCocktail = ref<Cocktail | null>(null)
             const selectedCocktailJson = localStorage.getItem('SelectedCocktail');
-            const setSelectedCocktail = (): void => {
+            const setSelectedCocktail = async (): Promise<void> => {
                 if (selectedCocktailJson) {
-                    selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
+                    selectedCocktail.value = await JSON.parse(selectedCocktailJson) as Cocktail;
                 }
             }
             // const selectedCocktail = localStorage.getItem('SelectedCocktail') != null ?  JSON.parse(localStorage.getItem('SelectedCocktail')) as Cocktail : null;
             let favFlag: boolean = false;
             const favBtnColor = ref<string>('gray');
+
+            const userID: number = Number(localStorage.getItem('user_id'));
+            const judgeFavCocktail = async (): Promise<void> => {
+                if (selectedCocktail.value) {
+                    const response = await getFavAPI(userID, selectedCocktail.value.cocktail_id);
+                    console.log(response);
+                    if (response.isFav) {
+                        favBtnColor.value = 'red';
+                        favFlag = true;
+                    }
+                }
+            }
 
             //Register and remove the favorite cocktial if the button is pushed
             const favBtn = (): void => {

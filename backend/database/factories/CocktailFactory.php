@@ -10,13 +10,12 @@ use App\Models\Cocktail;
  */
 class CocktailFactory extends Factory
 {
+    protected $model = Cocktail::class;
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = Cocktail::class;
-
     public function definition(): array
     {
         return [
