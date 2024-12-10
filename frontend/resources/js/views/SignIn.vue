@@ -56,7 +56,7 @@
     import router from '../router';
     import { State } from '@/types/stores/CommonStore';
     import { FormInstance } from 'ant-design-vue';
-    import { signinAPI } from '@/utils/AuthAPI';
+    import { signinAPI } from '@/APIs/AuthAPI';
     import { nameRules, emailRules, passRules } from '@/Validation/Rules';
 
     interface FormState {

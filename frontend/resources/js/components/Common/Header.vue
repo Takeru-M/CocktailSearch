@@ -40,7 +40,7 @@
     import router from '@/router';
     import { AxiosError } from 'axios';
     import { State } from '@/types/stores/CommonStore';
-    import { logoutAPI } from '@/utils/AuthAPI';
+    import { logoutAPI } from '@/APIs/AuthAPI';
 
     export default defineComponent ({
     setup () {

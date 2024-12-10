@@ -48,7 +48,7 @@
     import { useStore } from 'vuex';
     import CommonUtils from '@/utils/Common';
     import { State, Cocktail, Cocktails } from '@/types/stores/CommonStore';
-    import { registerHistoryAPI } from '@/utils/HistoryAPI';
+    import { registerHistoryAPI } from '@/APIs/HistoryAPI';
 
     export default defineComponent ({
         setup() {
@@ -60,6 +60,7 @@
             const cocktailData = computed<Cocktails>(() => store.getters.cocktailData);
 
             const cocktailDetail = async (result: Cocktail): Promise<void> => {
+                console.log(result);
                 await CommonUtils.registerCocktail(result);
                 await registerHistory(result);
                 setSelectedCocktail(result);

@@ -67,7 +67,7 @@
     import { HeartFilled } from '@ant-design/icons-vue';
     import { State } from '@/types/stores/CommonStore';
     import { Cocktail } from '@/types/stores/CommonStore';
-    import { getFavAPI, registerFavAPI, removeFavAPI } from '@/utils/FavoriteAPI';
+    import { getFavAPI, registerFavAPI, removeFavAPI } from '@/APIs/FavoriteAPI';
 
     export default defineComponent ({
         components: {
@@ -79,16 +79,19 @@
 
             onMounted(async () => {
                 await setSelectedCocktail();
-                await judgeFavCocktail();
             });
 
             const getCocktailFlag = computed(() => store.getters.getCocktailFlag);
             watch(getCocktailFlag, (newValue, oldValue) => {
-                const selectedCocktailJson = localStorage.getItem('SelectedCocktail');
-                if (selectedCocktailJson) {
-                    selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
+                if (newValue == true) {
+                    console.log(localStorage.getItem('SelectedCocktail'));
+                    const selectedCocktailJson = localStorage.getItem('SelectedCocktail');
+                    if (selectedCocktailJson) {
+                        selectedCocktail.value = JSON.parse(selectedCocktailJson) as Cocktail;
+                    }
+                    store.dispatch('setGetCocktailFlag', false);
+                    judgeFavCocktail();
                 }
-                store.dispatch('setGetCocktailFlag', false);
             })
 
             // const selectedCocktail = computed<Cocktail>(() => store.getters.selectedCocktail);
@@ -107,10 +110,11 @@
             const judgeFavCocktail = async (): Promise<void> => {
                 if (selectedCocktail.value) {
                     const response = await getFavAPI(userID, selectedCocktail.value.cocktail_id);
-                    console.log(response);
                     if (response.isFav) {
                         favBtnColor.value = 'red';
                         favFlag = true;
+                    } else {
+                        favFlag = false;
                     }
                 }
             }

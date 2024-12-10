@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import axios from 'axios';
 import { CocktailParams, State } from '@/types/stores/CommonStore';
 import { CommonActionContext, User, Cocktail, Cocktails, PreCocktailParams } from '@/types/stores/CommonStore';
-import { fetchCocktailsAPI } from "@/utils/CocktialAPI";
+import { fetchCocktailsAPI } from "@/APIs/CocktialAPI";
 
 export default createStore<State> ({
     state: {

@@ -55,7 +55,7 @@
     import { RouterLink } from 'vue-router';
     import { State } from '@/types/stores/CommonStore';
     import { FormInstance } from 'ant-design-vue';
-    import { loginAPI } from '@/utils/AuthAPI';
+    import { loginAPI } from '@/APIs/AuthAPI';
     import { emailRules, passRules } from '@/Validation/Rules';
 
     interface FormState {

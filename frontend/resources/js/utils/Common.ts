@@ -1,5 +1,5 @@
 import { Cocktail } from '@/types/stores/CommonStore';
-import { registerCocktailAPI } from "./CocktialAPI";
+import { registerCocktailAPI } from "../APIs/CocktialAPI";
 
 const CommonUtils = {
     async registerCocktail (cocktailData: Cocktail): Promise<void> {

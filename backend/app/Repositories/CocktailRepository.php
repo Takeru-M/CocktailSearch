@@ -31,8 +31,10 @@ class CocktailRepository
             'cocktail_digest' => $cocktailData['cocktail_digest'],
             'cocktail_desc' => $cocktailData['cocktail_desc'],
             'recipe_desc' => $cocktailData['recipe_desc'],
-            'recipes' => json_encode($cocktailData['recipes']),
-            'tags' => json_encode($cocktailData['tags']),
+            'recipes' => $cocktailData['recipes'],
+            'tags' => $cocktailData['tags'],
+            // 'recipes' => json_encode($cocktailData['recipes']),
+            // 'tags' => json_encode($cocktailData['tags']),
         ]);
     }
 }

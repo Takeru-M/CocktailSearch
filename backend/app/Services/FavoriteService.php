@@ -24,7 +24,7 @@ class FavoriteService {
     public function isFavorite ($userID, $cocktailID) {
         $result = $this->favoriteRepository->isFavorite($userID, $cocktailID);
         if ($result) {
-            return ['message' => 'This cocktail is registerd as favorite one',  'status' => 200, 'isFav' => true];
+            return ['message' => 'This cocktail is registerd as favorite one',  'status' => 200, 'isFav' => true, 'result' => $result];
         } else {
             return ['message' => 'This cocktail isn\'t registerd as favorite one',  'status' => 200, 'isFav' => false];
         }

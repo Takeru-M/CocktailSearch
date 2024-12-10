@@ -81,15 +81,15 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, computed, ref, onMounted } from 'vue';
+    import { defineComponent, computed, ref, onMounted , watch} from 'vue';
     import { useStore } from 'vuex';
     import { useI18n } from 'vue-i18n';
-    import { State, User } from '@/types/stores/CommonStore';
+    import { Cocktail, State, User } from '@/types/stores/CommonStore';
     import { CocktailResponse } from '@/types/responses/CommonResponse';
-    import { getFiveHistoriesAPI } from '@/utils/HistoryAPI';
-    import { getFiveFavCocktailsAPI } from '@/utils/FavoriteAPI';
-    import { getUserAPI } from '@/utils/UserAPI';
-    import { getCocktailAPI } from '@/utils/CocktialAPI';
+    import { getFiveHistoriesAPI } from '@/APIs/HistoryAPI';
+    import { getFiveFavCocktailsAPI } from '@/APIs/FavoriteAPI';
+    import { getUserAPI } from '@/APIs/UserAPI';
+    import { getCocktailAPI } from '@/APIs/CocktialAPI';
 
     export default defineComponent ({
         setup() {
@@ -98,6 +98,7 @@
             const user = ref<User | null>(null);
             let histories = ref<CocktailResponse[] | null>([]);
             let favCocktails = ref<CocktailResponse[] | null>([]);
+            const getCocktailFlag = computed(() => store.getters.getCocktailFlag);
 
             const userID: number = Number(localStorage.getItem('user_id'));
 
