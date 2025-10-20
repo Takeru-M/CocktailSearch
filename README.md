@@ -1,4 +1,4 @@
-The app for searching Cocktail.
+The app for searching Cocktails you might like.
 
 Functions
 ・Creating account
