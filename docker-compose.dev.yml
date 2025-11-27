@@ -1,0 +1,66 @@
+version: '3.8'
+
+# baseファイルを継承
+services:
+  # データベースサービス (MySQL)
+  db:
+    ports: # ホストの3306ポートに公開
+      - "3306:3306"
+
+  # Laravel (Backend) サービス
+  backend:
+    # Dockerfileのビルドパスとファイル名を指定
+    build:
+      context: ./backend
+      dockerfile: ./docker/Dockerfile.dev
+    container_name: backend_dev
+    volumes:
+      # ホストのコードをマウントし、開発時の変更を即時反映
+      - ./backend:/var/www/html
+      - /var/www/html/vendor # ベンダーディレクトリはコンテナ内に残す
+    environment:
+      # DB接続情報など
+      DB_HOST: db
+      DB_PORT: 3306
+    ports:
+      # PHP-FPMポートの公開（Nginx/Apacheをホストか別コンテナで動かす場合）
+      - "9000:9000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # Vue (Frontend) サービス
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/Dockerfile.dev
+    container_name: frontend_dev
+    volumes:
+      # ホストのコードをマウント
+      - ./frontend:/app
+      - /app/node_modules # node_modulesはコンテナ内に残す
+    ports:
+      # Vue開発サーバーのポートを公開 (例: Vite/Webpack Dev Server)
+      - "5173:5173" # Viteのデフォルトポートを仮定
+    # 開発サーバーを起動
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - app-network
+
+  # 開発用Webサーバー (Nginxなど) - 任意
+  # 開発ではホストのNginx/ApacheやLaravelのartisan serveを使うことも多いが、
+  # 独立したコンテナとしてNginxを立てる場合は以下を追加
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_dev
+    ports:
+      - "80:80"
+    volumes:
+      # - ./backend/public:/var/www/html/public:ro # Laravel publicディレクトリをマウント
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Nginx設定ファイル
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network

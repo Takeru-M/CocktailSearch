@@ -49,14 +49,14 @@ const app = createApp(App);
 //   router.push(lastRoute); // 保存されたルートに遷移
 // }
 
-const loginStatus: string | null = localStorage.getItem('login_status');
-if (loginStatus == 'true') {
-  router.push('dashboard');
-}
-
 app.use(store)
     .use(router)
     .use(vueI18n)
     .use(Antd)
     .use(ElementPlus)
 app.mount('#app');
+
+const loginStatus: string | null = localStorage.getItem('login_status');
+if (loginStatus == 'true') {
+  router.push('dashboard');
+}

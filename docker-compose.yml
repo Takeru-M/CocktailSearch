@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # データベースサービス (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      # 環境変数は .env ファイルから読み込むことを推奨
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      # データ永続化
+      - dbdata:/var/lib/mysql
+    # baseファイルではポートは公開しない（開発用・本番用で定義）
+    networks:
+      - app-network
+
+volumes:
+  dbdata:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,51 @@
+# # 本番用 - Stage 1: ビルダーステージ
+# FROM node:20-alpine AS builder
+
+# WORKDIR /app
+
+# # 依存関係をインストール
+# COPY frontend/package*.json ./
+# RUN npm install
+
+# # Vueコードをコピーしてビルド (Vue CLIまたはViteの設定に従う)
+# COPY frontend/ .
+# RUN npm run build # => dist/ ディレクトリに本番アセットが生成されると仮定
+
+# # 本番用 - Stage 2: 最終イメージ (Nginxで静的アセットを配信)
+# FROM nginx:alpine
+
+# # ビルドされたアセットをNginxのWebルートにコピー
+# # アセットのパスはVueのビルド設定に合わせる必要があります
+# COPY --from=builder /app/dist /usr/share/nginx/html
+
+# # Nginx設定ファイル (任意: ルーティング履歴モード対応など)
+# # COPY docker/nginx/nginx.prod.conf /etc/nginx/conf.d/default.conf
+
+# # Nginxコンテナを起動
+# CMD ["nginx", "-g", "daemon off;"]
+
+
+# === ビルドステージ: Vueアプリケーションのビルド ===
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# 依存関係のインストール
+COPY package.json package-lock.json ./
+RUN npm install
+
+# ソースコードをコピーし、本番用にビルド
+COPY . .
+RUN npm run build  # 通常、ビルド成果物は /app/dist に出力されると仮定
+
+# === 実行ステージ: Nginxで静的ファイルを提供 ===
+FROM nginx:stable-alpine
+
+# ビルドステージから静的ファイルをコピー
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Nginx設定ファイル（任意: 必要に応じて）
+# COPY ./docker/prod/nginx.conf /etc/nginx/conf.d/default.conf
+
+# 実行コマンド (Nginxがデフォルトで起動)
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

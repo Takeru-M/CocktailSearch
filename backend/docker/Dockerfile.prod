@@ -1,0 +1,52 @@
+# === ビルドステージ: 依存関係のインストール ===
+FROM php:8.3-cli AS composer_install
+
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    libonig-dev \
+    libpng-dev \
+    libjpeg-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd
+
+# Composerのインストール
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+# Laravelプロジェクトファイルをコピー
+WORKDIR /app
+COPY . /app
+# 依存関係のインストール (本番環境向け、開発ツールはスキップ)
+RUN composer install --no-dev --optimize-autoloader
+
+# === 実行ステージ: PHP-FPM for Production ===
+FROM php:8.3-fpm-alpine
+
+# 実行に必要なパッケージとPHP拡張をインストール
+RUN apk update && apk add --no-cache \
+    nginx \
+    oniguruma-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd
+
+# ビルドステージからベンダーファイルをコピー
+WORKDIR /var/www/html
+COPY --from=composer_install /app/vendor /var/www/html/vendor
+
+# アプリケーションコードをコピー
+COPY . /var/www/html
+
+# 権限設定
+RUN chown -R www-data:www-data /var/www/html
+
+# Nginxの設定ファイルをコピー (別途用意が必要)
+# COPY ./docker/prod/nginx.conf /etc/nginx/conf.d/default.conf
+
+# 実行コマンド (ここではPHP-FPMのみ。Nginxは別のコンテナで動かすのが一般的)
+CMD ["php-fpm"]

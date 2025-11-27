@@ -34,7 +34,6 @@ declare const _default: import("vue").DefineComponent<{
     readonly range: BooleanConstructor;
     readonly vertical: BooleanConstructor;
     readonly height: StringConstructor;
-    readonly debounce: import("element-plus/es/utils").EpPropFinalized<NumberConstructor, unknown, unknown, 300, boolean>;
     readonly rangeStartLabel: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
     readonly rangeEndLabel: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
     readonly formatValueText: import("element-plus/es/utils").EpPropFinalized<(new (...args: any[]) => (val: number) => string) | (() => (val: number) => string) | {
@@ -47,7 +46,7 @@ declare const _default: import("vue").DefineComponent<{
         readonly prototype: any;
     })[], unknown, unknown, undefined, boolean>;
     readonly tooltipClass: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
-    readonly placement: import("element-plus/es/utils").EpPropFinalized<StringConstructor, import("@popperjs/core").Placement, unknown, "top", boolean>;
+    readonly placement: import("element-plus/es/utils").EpPropFinalized<StringConstructor, import("element-plus").Placement, unknown, "top", boolean>;
     readonly marks: {
         readonly type: import("vue").PropType<{
             [x: number]: import("element-plus/es/utils").EpPropMergeType<(new (...args: any[]) => string | {
@@ -69,6 +68,7 @@ declare const _default: import("vue").DefineComponent<{
         __epPropKey: true;
     };
     readonly validateEvent: import("element-plus/es/utils").EpPropFinalized<BooleanConstructor, unknown, unknown, true, boolean>;
+    readonly persistent: import("element-plus/es/utils").EpPropFinalized<BooleanConstructor, unknown, unknown, true, boolean>;
 }, {
     onSliderClick: (event: MouseEvent | TouchEvent) => void;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
@@ -111,7 +111,6 @@ declare const _default: import("vue").DefineComponent<{
     readonly range: BooleanConstructor;
     readonly vertical: BooleanConstructor;
     readonly height: StringConstructor;
-    readonly debounce: import("element-plus/es/utils").EpPropFinalized<NumberConstructor, unknown, unknown, 300, boolean>;
     readonly rangeStartLabel: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
     readonly rangeEndLabel: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
     readonly formatValueText: import("element-plus/es/utils").EpPropFinalized<(new (...args: any[]) => (val: number) => string) | (() => (val: number) => string) | {
@@ -124,7 +123,7 @@ declare const _default: import("vue").DefineComponent<{
         readonly prototype: any;
     })[], unknown, unknown, undefined, boolean>;
     readonly tooltipClass: import("element-plus/es/utils").EpPropFinalized<StringConstructor, unknown, unknown, undefined, boolean>;
-    readonly placement: import("element-plus/es/utils").EpPropFinalized<StringConstructor, import("@popperjs/core").Placement, unknown, "top", boolean>;
+    readonly placement: import("element-plus/es/utils").EpPropFinalized<StringConstructor, import("element-plus").Placement, unknown, "top", boolean>;
     readonly marks: {
         readonly type: import("vue").PropType<{
             [x: number]: import("element-plus/es/utils").EpPropMergeType<(new (...args: any[]) => string | {
@@ -146,6 +145,7 @@ declare const _default: import("vue").DefineComponent<{
         __epPropKey: true;
     };
     readonly validateEvent: import("element-plus/es/utils").EpPropFinalized<BooleanConstructor, unknown, unknown, true, boolean>;
+    readonly persistent: import("element-plus/es/utils").EpPropFinalized<BooleanConstructor, unknown, unknown, true, boolean>;
 }>> & {
     "onUpdate:modelValue"?: ((value: import("element-plus/es/utils").Arrayable<number>) => any) | undefined;
     onChange?: ((value: import("element-plus/es/utils").Arrayable<number>) => any) | undefined;
@@ -156,11 +156,11 @@ declare const _default: import("vue").DefineComponent<{
     readonly range: boolean;
     readonly id: string;
     readonly modelValue: import("element-plus/es/utils").EpPropMergeType<(new (...args: any[]) => number | number[]) | (() => import("element-plus/es/utils").Arrayable<number>) | ((new (...args: any[]) => number | number[]) | (() => import("element-plus/es/utils").Arrayable<number>))[], unknown, unknown>;
-    readonly placement: import("element-plus/es/utils").EpPropMergeType<StringConstructor, import("@popperjs/core").Placement, unknown>;
+    readonly placement: import("element-plus/es/utils").EpPropMergeType<StringConstructor, import("element-plus").Placement, unknown>;
     readonly min: number;
     readonly max: number;
     readonly validateEvent: import("element-plus/es/utils").EpPropMergeType<BooleanConstructor, unknown, unknown>;
-    readonly debounce: number;
+    readonly persistent: import("element-plus/es/utils").EpPropMergeType<BooleanConstructor, unknown, unknown>;
     readonly step: number;
     readonly showInputControls: import("element-plus/es/utils").EpPropMergeType<BooleanConstructor, unknown, unknown>;
     readonly showTooltip: import("element-plus/es/utils").EpPropMergeType<BooleanConstructor, unknown, unknown>;

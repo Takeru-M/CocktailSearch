@@ -1,0 +1,18 @@
+# 開発用 (frontend)
+FROM node:20-alpine
+
+# Node.jsパッケージのキャッシュを有効にするためのボリューム
+# RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app
+
+# WORKDIR /var/www/frontend
+WORKDIR /app
+
+# ホストからファイルをコピー
+COPY ../../package*.json ./
+
+# 依存関係のインストール
+RUN npm install
+
+# 開発中はホットリロードのためにコードをホストと共有
+# 以下のCMDで開発サーバーを起動
+CMD ["npm", "run", "dev"]
